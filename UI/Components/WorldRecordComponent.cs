@@ -45,7 +45,7 @@ namespace LiveSplit.WorldRecord.UI.Components
         {
             State = state;
 
-            RefreshInterval = TimeSpan.FromSeconds(5);
+            RefreshInterval = TimeSpan.FromMinutes(5);
             Cache = new GraphicsCache();
             TimeFormatter = new RegularTimeFormatter();
             InternalComponent = new InfoTextComponent("World Record", "-");
