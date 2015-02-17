@@ -1,5 +1,6 @@
 ﻿using LiveSplit.Model;
 using LiveSplit.UI.Components;
+using LiveSplit.Web.Share;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,42 +14,50 @@ namespace LiveSplit.WorldRecord.UI.Components
     {
         public string ComponentName
         {
-            get { throw new NotImplementedException(); }
+            get { return "World Record"; }
         }
 
         public string Description
         {
-            get { throw new NotImplementedException(); }
+            get { return "Shows the World Record for the run"; }
         }
 
         public ComponentCategory Category
         {
-            get { throw new NotImplementedException(); }
+            get { return ComponentCategory.Information; }
         }
 
         public IComponent Create(LiveSplitState state)
         {
-            throw new NotImplementedException();
+            return new WorldRecordComponent(state);
         }
 
         public string UpdateName
         {
-            get { throw new NotImplementedException(); }
+            get { return ComponentName; }
         }
 
         public string XMLURL
         {
-            get { throw new NotImplementedException(); }
+#if RELEASE_CANDIDATE
+            get { return "http://livesplit.org/update_rc_sdhjdop/Components/update.LiveSplit.WorldRecord.xml"; }
+#else
+            get { return "http://livesplit.org/update/Components/update.LiveSplit.WorldRecord.xml"; }
+#endif
         }
 
         public string UpdateURL
         {
-            get { throw new NotImplementedException(); }
+#if RELEASE_CANDIDATE
+            get { return "http://livesplit.org/update_rc_sdhjdop/"; }
+#else
+            get { return "http://livesplit.org/update/"; }
+#endif
         }
 
         public Version Version
         {
-            get { throw new NotImplementedException(); }
+            get { return Version.Parse("1.5.2"); }
         }
     }
 }
