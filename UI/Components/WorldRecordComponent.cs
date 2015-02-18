@@ -90,13 +90,7 @@ namespace LiveSplit.WorldRecord.UI.Components
                 Task.Factory.StartNew(RefreshWorldRecord);
             }
 
-            Cache["Value"] = InternalComponent.InformationValue;
             InternalComponent.Update(invalidator, state, width, height, mode);
-
-            if (invalidator != null && Cache.HasChanged)
-            {
-                invalidator.Invalidate(0, 0, width, height);
-            }
         }
 
         public void DrawHorizontal(Graphics g, LiveSplitState state, float height, Region clipRegion)
