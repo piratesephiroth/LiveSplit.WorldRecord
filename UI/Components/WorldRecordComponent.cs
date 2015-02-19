@@ -6,6 +6,7 @@ using LiveSplit.Web.Share;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,8 @@ namespace LiveSplit.WorldRecord.UI.Components
     public class WorldRecordComponent : IComponent
     {
         protected InfoTextComponent InternalComponent { get; set; }
+
+        protected WorldRecordSettings Settings { get; set; }
 
         private GraphicsCache Cache { get; set; }
         private ITimeFormatter TimeFormatter { get; set; }
@@ -49,6 +52,10 @@ namespace LiveSplit.WorldRecord.UI.Components
             Cache = new GraphicsCache();
             TimeFormatter = new RegularTimeFormatter();
             InternalComponent = new InfoTextComponent("World Record", "-");
+            Settings = new WorldRecordSettings()
+            {
+                CurrentState = state
+            };
             InternalComponent.AlternateNameText = new[]
             {
                 "WR"
@@ -93,42 +100,65 @@ namespace LiveSplit.WorldRecord.UI.Components
             InternalComponent.Update(invalidator, state, width, height, mode);
         }
 
-        public void DrawHorizontal(Graphics g, LiveSplitState state, float height, Region clipRegion)
+        private void DrawBackground(Graphics g, LiveSplitState state, float width, float height)
         {
+            if (Settings.BackgroundColor.ToArgb() != Color.Transparent.ToArgb()
+                || Settings.BackgroundGradient != GradientType.Plain
+                && Settings.BackgroundColor2.ToArgb() != Color.Transparent.ToArgb())
+            {
+                var gradientBrush = new LinearGradientBrush(
+                            new PointF(0, 0),
+                            Settings.BackgroundGradient == GradientType.Horizontal
+                            ? new PointF(width, 0)
+                            : new PointF(0, height),
+                            Settings.BackgroundColor,
+                            Settings.BackgroundGradient == GradientType.Plain
+                            ? Settings.BackgroundColor
+                            : Settings.BackgroundColor2);
+                g.FillRectangle(gradientBrush, 0, 0, width, height);
+            }
+        }
+
+        private void PrepareDraw(LiveSplitState state)
+        {
+            InternalComponent.DisplayTwoRows = Settings.Display2Rows;
+
             InternalComponent.NameLabel.HasShadow
                 = InternalComponent.ValueLabel.HasShadow
                 = state.LayoutSettings.DropShadows;
 
-            InternalComponent.NameLabel.ForeColor = state.LayoutSettings.TextColor;
-            InternalComponent.ValueLabel.ForeColor = state.LayoutSettings.TextColor;
+            InternalComponent.NameLabel.ForeColor = Settings.OverrideTextColor ? Settings.TextColor : state.LayoutSettings.TextColor;
+            InternalComponent.ValueLabel.ForeColor = Settings.OverrideTimeColor ? Settings.TimeColor : state.LayoutSettings.TextColor;
+        }
 
+        public void DrawHorizontal(Graphics g, LiveSplitState state, float height, Region clipRegion)
+        {
+            DrawBackground(g, state, HorizontalWidth, height);
+            PrepareDraw(state);
             InternalComponent.DrawHorizontal(g, state, height, clipRegion);
         }
 
         public void DrawVertical(Graphics g, LiveSplitState state, float width, Region clipRegion)
         {
-            InternalComponent.NameLabel.HasShadow
-                = InternalComponent.ValueLabel.HasShadow
-                = state.LayoutSettings.DropShadows;
-
-            InternalComponent.NameLabel.ForeColor = state.LayoutSettings.TextColor;
-            InternalComponent.ValueLabel.ForeColor = state.LayoutSettings.TextColor;
-
+            DrawBackground(g, state, width, VerticalHeight);
+            PrepareDraw(state);
             InternalComponent.DrawVertical(g, state, width, clipRegion);
         }
 
         public Control GetSettingsControl(LayoutMode mode)
         {
-            return null;
+            Settings.Mode = mode;
+            return Settings;
         }
 
         public XmlNode GetSettings(XmlDocument document)
         {
-            return document.CreateElement("Settings");
+            return Settings.GetSettings(document);
         }
 
         public void SetSettings(XmlNode settings)
         {
+            Settings.SetSettings(settings);
         }
     }
 }
