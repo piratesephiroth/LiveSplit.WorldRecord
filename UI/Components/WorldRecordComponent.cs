@@ -26,6 +26,7 @@ namespace LiveSplit.WorldRecord.UI.Components
         private LiveSplitState State { get; set; }
         private TripleDateTime LastUpdate { get; set; }
         private TimeSpan RefreshInterval { get; set; }
+        public SpeedrunCom.WorldRecord WorldRecord { get; protected set; }
 
         public string ComponentName
         {
@@ -73,16 +74,21 @@ namespace LiveSplit.WorldRecord.UI.Components
             if (State != null && State.Run != null &&
                 !string.IsNullOrEmpty(State.Run.GameName) && !string.IsNullOrEmpty(State.Run.CategoryName))
             {
-                var wr = SpeedrunCom.Instance.GetWorldRecord(State.Run.GameName, State.Run.CategoryName);
-                if (!string.IsNullOrEmpty(wr.Runner))
-                {
-                    var time = TimeFormatter.Format(wr.Time);
-                    InternalComponent.InformationValue = string.Format("{0} by {1}", time, wr.Runner);
-                }
-                else
-                {
-                    InternalComponent.InformationValue = "-";
-                }
+                WorldRecord = SpeedrunCom.Instance.GetWorldRecord(State.Run.GameName, State.Run.CategoryName);
+                ShowWorldRecord();
+            }
+        }
+
+        private void ShowWorldRecord()
+        {
+            if (!string.IsNullOrEmpty(WorldRecord.Runner))
+            {
+                var time = TimeFormatter.Format(WorldRecord.Time[State.CurrentTimingMethod]);
+                InternalComponent.InformationValue = string.Format("{0} by {1}", time, WorldRecord.Runner);
+            }
+            else
+            {
+                InternalComponent.InformationValue = "-";
             }
         }
 
@@ -95,6 +101,16 @@ namespace LiveSplit.WorldRecord.UI.Components
             if (Cache.HasChanged || (LastUpdate != null && TripleDateTime.Now - LastUpdate >= RefreshInterval))
             {
                 Task.Factory.StartNew(RefreshWorldRecord);
+            }
+            else
+            {
+                Cache.Restart();
+                Cache["TimingMethod"] = state.CurrentTimingMethod;
+
+                if (Cache.HasChanged)
+                {
+                    ShowWorldRecord();
+                }
             }
 
             InternalComponent.Update(invalidator, state, width, height, mode);
