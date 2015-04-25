@@ -1,18 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Globalization;
 using Fetze.WinFormsColor;
-using LiveSplit.TimeFormatters;
 using LiveSplit.Model;
-using LiveSplit.Model.Comparisons;
 
 namespace LiveSplit.UI.Components
 {
@@ -101,11 +93,6 @@ namespace LiveSplit.UI.Components
             GradientString = cmbGradientType.SelectedItem.ToString();
         }
 
-        private T ParseEnum<T>(XmlElement element)
-        {
-            return (T)Enum.Parse(typeof(T), element.InnerText);
-        }
-
         public void SetSettings(XmlNode node)
         {
             var element = (XmlElement)node;
@@ -139,16 +126,9 @@ namespace LiveSplit.UI.Components
             return parent;
         }
 
-        private Color ParseColor(XmlElement colorElement)
+        private static Color ParseColor(XmlElement colorElement)
         {
             return Color.FromArgb(Int32.Parse(colorElement.InnerText, NumberStyles.HexNumber));
-        }
-
-        private XmlElement ToElement(XmlDocument document, Color color, string name)
-        {
-            var element = document.CreateElement(name);
-            element.InnerText = color.ToArgb().ToString("X8");
-            return element;
         }
 
         private void ColorButtonClick(object sender, EventArgs e)
@@ -161,7 +141,14 @@ namespace LiveSplit.UI.Components
             button.BackColor = picker.SelectedColor;
         }
 
-        private XmlElement ToElement<T>(XmlDocument document, String name, T value)
+        private static XmlElement ToElement(XmlDocument document, Color color, string name)
+        {
+            var element = document.CreateElement(name);
+            element.InnerText = color.ToArgb().ToString("X8");
+            return element;
+        }
+
+        private static XmlElement ToElement<T>(XmlDocument document, String name, T value)
         {
             var element = document.CreateElement(name);
             element.InnerText = value.ToString();

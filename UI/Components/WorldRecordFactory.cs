@@ -1,10 +1,6 @@
 ﻿using LiveSplit.Model;
 using LiveSplit.UI.Components;
-using LiveSplit.Web.Share;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 [assembly:ComponentFactory(typeof(LiveSplit.WorldRecord.UI.Components.WorldRecordFactory))]
 
