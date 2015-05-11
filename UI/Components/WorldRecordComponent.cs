@@ -24,7 +24,7 @@ namespace LiveSplit.WorldRecord.UI.Components
         private LiveSplitState State { get; set; }
         private TripleDateTime LastUpdate { get; set; }
         private TimeSpan RefreshInterval { get; set; }
-        public SpeedrunCom.WorldRecord WorldRecord { get; protected set; }
+        public SpeedrunCom.Record WorldRecord { get; protected set; }
 
         public string ComponentName
         {
