@@ -4,6 +4,7 @@ using LiveSplit.UI;
 using LiveSplit.UI.Components;
 using LiveSplit.Web.Share;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -79,10 +80,11 @@ namespace LiveSplit.WorldRecord.UI.Components
 
         private void ShowWorldRecord()
         {
-            if (!string.IsNullOrEmpty(WorldRecord.Runner))
+            if (WorldRecord.Runners != null)
             {
                 var time = TimeFormatter.Format(WorldRecord.Time[State.CurrentTimingMethod]);
-                InternalComponent.InformationValue = string.Format("{0} by {1}", time, WorldRecord.Runner);
+                var runners = WorldRecord.Runners.Aggregate((a, b) => a + " & " + b);
+                InternalComponent.InformationValue = string.Format("{0} by {1}", time, runners);
             }
             else
             {
