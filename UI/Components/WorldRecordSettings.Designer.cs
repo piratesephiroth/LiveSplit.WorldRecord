@@ -37,8 +37,8 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.btnTimeColor = new System.Windows.Forms.Button();
-            this.chkOverrideTimeColor = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.chkOverrideTimeColor = new System.Windows.Forms.CheckBox();
             this.cmbGradientType = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
             this.btnColor1 = new System.Windows.Forms.Button();
@@ -182,6 +182,16 @@
             this.btnTimeColor.UseVisualStyleBackColor = false;
             this.btnTimeColor.Click += new System.EventHandler(this.ColorButtonClick);
             // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(3, 37);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(147, 13);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "Color:";
+            // 
             // chkOverrideTimeColor
             // 
             this.chkOverrideTimeColor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
@@ -193,16 +203,6 @@
             this.chkOverrideTimeColor.TabIndex = 0;
             this.chkOverrideTimeColor.Text = "Override Layout Settings";
             this.chkOverrideTimeColor.UseVisualStyleBackColor = true;
-            // 
-            // label2
-            // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 37);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(147, 13);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "Color:";
             // 
             // cmbGradientType
             // 
@@ -262,7 +262,7 @@
             this.chkTwoRows.Margin = new System.Windows.Forms.Padding(7, 3, 3, 3);
             this.chkTwoRows.Name = "chkTwoRows";
             this.chkTwoRows.Size = new System.Drawing.Size(149, 17);
-            this.chkTwoRows.TabIndex = 36;
+            this.chkTwoRows.TabIndex = 3;
             this.chkTwoRows.Text = "Display 2 Rows";
             this.chkTwoRows.UseVisualStyleBackColor = true;
             // 
