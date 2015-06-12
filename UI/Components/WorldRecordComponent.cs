@@ -87,7 +87,16 @@ namespace LiveSplit.WorldRecord.UI.Components
         {
             if (WorldRecord.Runners != null)
             {
-                var time = TimeFormatter.Format(WorldRecord.Time[State.CurrentTimingMethod]);
+                var timingMethod = State.CurrentTimingMethod;
+                if (!WorldRecord.Time[timingMethod].HasValue)
+                {
+                    if (timingMethod == TimingMethod.RealTime)
+                        timingMethod = TimingMethod.GameTime;
+                    else
+                        timingMethod = TimingMethod.RealTime;
+                }
+
+                var time = TimeFormatter.Format(WorldRecord.Time[timingMethod]);
                 var runners = WorldRecord.Runners.Aggregate((a, b) => a + " & " + b);
                 InternalComponent.InformationValue = string.Format("{0} by {1}", time, runners);
             }
