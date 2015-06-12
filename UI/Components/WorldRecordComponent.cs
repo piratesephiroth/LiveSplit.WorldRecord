@@ -74,8 +74,13 @@ namespace LiveSplit.WorldRecord.UI.Components
                 !string.IsNullOrEmpty(State.Run.GameName) && !string.IsNullOrEmpty(State.Run.CategoryName))
             {
                 WorldRecord = SpeedrunCom.Instance.GetWorldRecord(State.Run.GameName, State.Run.CategoryName);
-                ShowWorldRecord();
             }
+            else
+            {
+                WorldRecord = default(SpeedrunCom.Record);
+            }
+
+            ShowWorldRecord();
         }
 
         private void ShowWorldRecord()
