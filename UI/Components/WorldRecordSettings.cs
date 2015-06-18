@@ -26,6 +26,7 @@ namespace LiveSplit.UI.Components
 
         public LiveSplitState CurrentState { get; set; }
         public bool Display2Rows { get; set; }
+        public bool CenteredText { get { return true; } }
 
         public LayoutMode Mode { get; set; }
 
