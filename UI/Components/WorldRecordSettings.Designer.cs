@@ -131,6 +131,7 @@
             this.chkOverrideTextColor.TabIndex = 0;
             this.chkOverrideTextColor.Text = "Override Layout Settings";
             this.chkOverrideTextColor.UseVisualStyleBackColor = true;
+            this.chkOverrideTextColor.CheckedChanged += new System.EventHandler(chkOverrideTextColor_CheckedChanged);
             // 
             // label1
             // 
@@ -203,6 +204,7 @@
             this.chkOverrideTimeColor.TabIndex = 0;
             this.chkOverrideTimeColor.Text = "Override Layout Settings";
             this.chkOverrideTimeColor.UseVisualStyleBackColor = true;
+            this.chkOverrideTimeColor.CheckedChanged += new System.EventHandler(chkOverrideTimeColor_CheckedChanged);
             // 
             // cmbGradientType
             // 
@@ -217,6 +219,7 @@
             this.cmbGradientType.Name = "cmbGradientType";
             this.cmbGradientType.Size = new System.Drawing.Size(239, 21);
             this.cmbGradientType.TabIndex = 2;
+            this.cmbGradientType.SelectedIndexChanged += new System.EventHandler(cmbGradientType_SelectedIndexChanged);
             // 
             // label11
             // 
@@ -274,6 +277,7 @@
             this.Name = "WorldRecordSettings";
             this.Padding = new System.Windows.Forms.Padding(7);
             this.Size = new System.Drawing.Size(476, 239);
+            this.Load += new System.EventHandler(WorldRecordSettings_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.groupBox1.ResumeLayout(false);

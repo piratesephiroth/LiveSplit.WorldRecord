@@ -46,15 +46,9 @@ namespace LiveSplit.UI.Components
             btnTextColor.DataBindings.Add("BackColor", this, "TextColor", false, DataSourceUpdateMode.OnPropertyChanged);
             chkOverrideTimeColor.DataBindings.Add("Checked", this, "OverrideTimeColor", false, DataSourceUpdateMode.OnPropertyChanged);
             btnTimeColor.DataBindings.Add("BackColor", this, "TimeColor", false, DataSourceUpdateMode.OnPropertyChanged);
-
-            cmbGradientType.SelectedIndexChanged += cmbGradientType_SelectedIndexChanged;
             cmbGradientType.DataBindings.Add("SelectedItem", this, "GradientString", false, DataSourceUpdateMode.OnPropertyChanged);
             btnColor1.DataBindings.Add("BackColor", this, "BackgroundColor", false, DataSourceUpdateMode.OnPropertyChanged);
             btnColor2.DataBindings.Add("BackColor", this, "BackgroundColor2", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.Load += WorldRecordSettings_Load;
-
-            chkOverrideTextColor.CheckedChanged += chkOverrideTextColor_CheckedChanged;
-            chkOverrideTimeColor.CheckedChanged += chkOverrideTimeColor_CheckedChanged;
         }
 
         void chkOverrideTimeColor_CheckedChanged(object sender, EventArgs e)
