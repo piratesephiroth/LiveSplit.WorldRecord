@@ -25,7 +25,7 @@ namespace LiveSplit.WorldRecord.UI.Components
         private LiveSplitState State { get; set; }
         private TripleDateTime LastUpdate { get; set; }
         private TimeSpan RefreshInterval { get; set; }
-        public SpeedrunCom.Record WorldRecord { get; protected set; }
+        public OldSpeedrunCom.Record WorldRecord { get; protected set; }
 
         public string ComponentName
         {
@@ -73,11 +73,11 @@ namespace LiveSplit.WorldRecord.UI.Components
             if (State != null && State.Run != null &&
                 !string.IsNullOrEmpty(State.Run.GameName) && !string.IsNullOrEmpty(State.Run.CategoryName))
             {
-                WorldRecord = SpeedrunCom.Instance.GetWorldRecord(State.Run.GameName, State.Run.CategoryName);
+                WorldRecord = OldSpeedrunCom.Instance.GetWorldRecord(State.Run.GameName, State.Run.CategoryName);
             }
             else
             {
-                WorldRecord = default(SpeedrunCom.Record);
+                WorldRecord = default(OldSpeedrunCom.Record);
             }
 
             ShowWorldRecord();
