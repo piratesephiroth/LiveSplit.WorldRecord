@@ -95,7 +95,7 @@ namespace LiveSplit.WorldRecord.UI.Components
                 var time = TimeFormatter.Format(WorldRecord.Time[timingMethod]);
                 var runners = WorldRecord.Runners.Aggregate((a, b) => a + " & " + b);
 
-                if (Settings.CenteredText)
+                if (Settings.CenteredText && !Settings.Display2Rows)
                 {
                     InternalComponent.InformationName = string.Format("World Record is {0} by {1}", time, runners);
                     InternalComponent.AlternateNameText = new[]
@@ -112,7 +112,7 @@ namespace LiveSplit.WorldRecord.UI.Components
             }
             else
             {
-                if (Settings.CenteredText)
+                if (Settings.CenteredText && !Settings.Display2Rows)
                 {
                     InternalComponent.InformationName = "Unknown World Record";
                     InternalComponent.AlternateNameText = new[] { "Unknown WR" };
@@ -136,8 +136,8 @@ namespace LiveSplit.WorldRecord.UI.Components
             }
             else
             {
-                Cache.Restart();
                 Cache["TimingMethod"] = state.CurrentTimingMethod;
+                Cache["CenteredText"] = Settings.CenteredText && !Settings.Display2Rows;
 
                 if (Cache.HasChanged)
                 {
@@ -175,7 +175,7 @@ namespace LiveSplit.WorldRecord.UI.Components
                 = InternalComponent.ValueLabel.HasShadow
                 = state.LayoutSettings.DropShadows;
 
-            if (Settings.CenteredText)
+            if (Settings.CenteredText && !Settings.Display2Rows)
             {
                 InternalComponent.NameLabel.HorizontalAlignment = StringAlignment.Center;
                 InternalComponent.ValueLabel.HorizontalAlignment = StringAlignment.Center;
