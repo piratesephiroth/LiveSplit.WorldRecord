@@ -56,10 +56,6 @@ namespace LiveSplit.WorldRecord.UI.Components
             {
                 CurrentState = state
             };
-            InternalComponent.AlternateNameText = new[]
-            {
-                "WR"
-            };
         }
 
         public void Dispose()
@@ -98,11 +94,33 @@ namespace LiveSplit.WorldRecord.UI.Components
 
                 var time = TimeFormatter.Format(WorldRecord.Time[timingMethod]);
                 var runners = WorldRecord.Runners.Aggregate((a, b) => a + " & " + b);
-                InternalComponent.InformationValue = string.Format("{0} by {1}", time, runners);
+
+                if (Settings.CenteredText && !Settings.Display2Rows)
+                {
+                    InternalComponent.InformationName = string.Format("World Record is {0} by {1}", time, runners);
+                    InternalComponent.AlternateNameText = new[]
+                    {
+                        string.Format("World Record: {0} by {1}", time, runners),
+                        string.Format("WR: {0} by {1}", time, runners),
+                        string.Format("WR is {0} by {1}", time, runners)
+                    };
+                }
+                else
+                {
+                    InternalComponent.InformationValue = string.Format("{0} by {1}", time, runners);
+                }
             }
             else
             {
-                InternalComponent.InformationValue = "-";
+                if (Settings.CenteredText && !Settings.Display2Rows)
+                {
+                    InternalComponent.InformationName = "Unknown World Record";
+                    InternalComponent.AlternateNameText = new[] { "Unknown WR" };
+                }
+                else
+                {
+                    InternalComponent.InformationValue = "-";
+                }
             }
         }
 
@@ -118,8 +136,8 @@ namespace LiveSplit.WorldRecord.UI.Components
             }
             else
             {
-                Cache.Restart();
                 Cache["TimingMethod"] = state.CurrentTimingMethod;
+                Cache["CenteredText"] = Settings.CenteredText && !Settings.Display2Rows;
 
                 if (Cache.HasChanged)
                 {
@@ -149,13 +167,36 @@ namespace LiveSplit.WorldRecord.UI.Components
             }
         }
 
-        private void PrepareDraw(LiveSplitState state)
+        private void PrepareDraw(LiveSplitState state, LayoutMode mode)
         {
             InternalComponent.DisplayTwoRows = Settings.Display2Rows;
 
             InternalComponent.NameLabel.HasShadow
                 = InternalComponent.ValueLabel.HasShadow
                 = state.LayoutSettings.DropShadows;
+
+            if (Settings.CenteredText && !Settings.Display2Rows)
+            {
+                InternalComponent.NameLabel.HorizontalAlignment = StringAlignment.Center;
+                InternalComponent.ValueLabel.HorizontalAlignment = StringAlignment.Center;
+                InternalComponent.NameLabel.VerticalAlignment = StringAlignment.Center;
+                InternalComponent.ValueLabel.VerticalAlignment = StringAlignment.Center;
+                InternalComponent.InformationValue = "";
+            }
+            else
+            {
+                InternalComponent.InformationName = "World Record";
+                InternalComponent.AlternateNameText = new[]
+                {
+                    "WR"
+                };
+                InternalComponent.NameLabel.HorizontalAlignment = StringAlignment.Near;
+                InternalComponent.ValueLabel.HorizontalAlignment = StringAlignment.Far;
+                InternalComponent.NameLabel.VerticalAlignment =
+                    mode == LayoutMode.Horizontal || Settings.Display2Rows ? StringAlignment.Near : StringAlignment.Center;
+                InternalComponent.ValueLabel.VerticalAlignment =
+                    mode == LayoutMode.Horizontal || Settings.Display2Rows ? StringAlignment.Far : StringAlignment.Center;
+            }
 
             InternalComponent.NameLabel.ForeColor = Settings.OverrideTextColor ? Settings.TextColor : state.LayoutSettings.TextColor;
             InternalComponent.ValueLabel.ForeColor = Settings.OverrideTimeColor ? Settings.TimeColor : state.LayoutSettings.TextColor;
@@ -164,14 +205,14 @@ namespace LiveSplit.WorldRecord.UI.Components
         public void DrawHorizontal(Graphics g, LiveSplitState state, float height, Region clipRegion)
         {
             DrawBackground(g, state, HorizontalWidth, height);
-            PrepareDraw(state);
+            PrepareDraw(state, LayoutMode.Horizontal);
             InternalComponent.DrawHorizontal(g, state, height, clipRegion);
         }
 
         public void DrawVertical(Graphics g, LiveSplitState state, float width, Region clipRegion)
         {
             DrawBackground(g, state, width, VerticalHeight);
-            PrepareDraw(state);
+            PrepareDraw(state, LayoutMode.Vertical);
             InternalComponent.DrawVertical(g, state, width, clipRegion);
         }
 
