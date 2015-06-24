@@ -26,6 +26,7 @@ namespace LiveSplit.UI.Components
 
         public LiveSplitState CurrentState { get; set; }
         public bool Display2Rows { get; set; }
+        public bool CenteredText { get; set; }
 
         public LayoutMode Mode { get; set; }
 
@@ -41,20 +42,15 @@ namespace LiveSplit.UI.Components
             BackgroundColor2 = Color.Transparent;
             BackgroundGradient = GradientType.Plain;
             Display2Rows = false;
+            CenteredText = true;
 
             chkOverrideTextColor.DataBindings.Add("Checked", this, "OverrideTextColor", false, DataSourceUpdateMode.OnPropertyChanged);
             btnTextColor.DataBindings.Add("BackColor", this, "TextColor", false, DataSourceUpdateMode.OnPropertyChanged);
             chkOverrideTimeColor.DataBindings.Add("Checked", this, "OverrideTimeColor", false, DataSourceUpdateMode.OnPropertyChanged);
             btnTimeColor.DataBindings.Add("BackColor", this, "TimeColor", false, DataSourceUpdateMode.OnPropertyChanged);
-
-            cmbGradientType.SelectedIndexChanged += cmbGradientType_SelectedIndexChanged;
             cmbGradientType.DataBindings.Add("SelectedItem", this, "GradientString", false, DataSourceUpdateMode.OnPropertyChanged);
             btnColor1.DataBindings.Add("BackColor", this, "BackgroundColor", false, DataSourceUpdateMode.OnPropertyChanged);
             btnColor2.DataBindings.Add("BackColor", this, "BackgroundColor2", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.Load += WorldRecordSettings_Load;
-
-            chkOverrideTextColor.CheckedChanged += chkOverrideTextColor_CheckedChanged;
-            chkOverrideTimeColor.CheckedChanged += chkOverrideTimeColor_CheckedChanged;
         }
 
         void chkOverrideTimeColor_CheckedChanged(object sender, EventArgs e)
@@ -83,6 +79,7 @@ namespace LiveSplit.UI.Components
                 chkTwoRows.DataBindings.Clear();
                 chkTwoRows.DataBindings.Add("Checked", this, "Display2Rows", false, DataSourceUpdateMode.OnPropertyChanged);
             }
+            chkTwoRows_CheckedChanged(null, null);
         }
 
         void cmbGradientType_SelectedIndexChanged(object sender, EventArgs e)
@@ -104,12 +101,13 @@ namespace LiveSplit.UI.Components
             BackgroundColor2 = SettingsHelper.ParseColor(element["BackgroundColor2"]);
             GradientString = SettingsHelper.ParseString(element["BackgroundGradient"]);
             Display2Rows = SettingsHelper.ParseBool(element["Display2Rows"]);
+            CenteredText = SettingsHelper.ParseBool(element["CenteredText"]);
         }
 
         public XmlNode GetSettings(XmlDocument document)
         {
             var parent = document.CreateElement("Settings");
-            parent.AppendChild(SettingsHelper.ToElement(document, "Version", "1.5"));
+            parent.AppendChild(SettingsHelper.ToElement(document, "Version", "1.6"));
             parent.AppendChild(SettingsHelper.ToElement(document, TextColor, "TextColor"));
             parent.AppendChild(SettingsHelper.ToElement(document, "OverrideTextColor", OverrideTextColor));
             parent.AppendChild(SettingsHelper.ToElement(document, TimeColor, "TimeColor"));
@@ -118,17 +116,28 @@ namespace LiveSplit.UI.Components
             parent.AppendChild(SettingsHelper.ToElement(document, BackgroundColor2, "BackgroundColor2"));
             parent.AppendChild(SettingsHelper.ToElement(document, "BackgroundGradient", BackgroundGradient));
             parent.AppendChild(SettingsHelper.ToElement(document, "Display2Rows", Display2Rows));
+            parent.AppendChild(SettingsHelper.ToElement(document, "CenteredText", CenteredText));
             return parent;
         }
 
         private void ColorButtonClick(object sender, EventArgs e)
         {
-            var button = (Button)sender;
-            var picker = new ColorPickerDialog();
-            picker.SelectedColorChanged += (s, x) => button.BackColor = picker.SelectedColor;
-            picker.SelectedColor = picker.OldColor = button.BackColor;
-            picker.ShowDialog(this);
-            button.BackColor = picker.SelectedColor;
+            SettingsHelper.ColorButtonClick((Button)sender, this);
+        }
+
+        private void chkTwoRows_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkTwoRows.Checked)
+            {
+                chkCenteredText.Enabled = false;
+                chkCenteredText.DataBindings.Clear();
+                chkCenteredText.Checked = false;
+            }
+            else
+            {
+                chkCenteredText.Enabled = true;
+                chkCenteredText.DataBindings.Add("Checked", this, "CenteredText", false, DataSourceUpdateMode.OnPropertyChanged);
+            }
         }
     }
 }

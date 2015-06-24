@@ -44,6 +44,7 @@
             this.btnColor1 = new System.Windows.Forms.Button();
             this.btnColor2 = new System.Windows.Forms.Button();
             this.chkTwoRows = new System.Windows.Forms.CheckBox();
+            this.chkCenteredText = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -65,6 +66,7 @@
             this.tableLayoutPanel1.Controls.Add(this.btnColor1, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnColor2, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.chkTwoRows, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.chkCenteredText, 3, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(7, 7);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -131,6 +133,7 @@
             this.chkOverrideTextColor.TabIndex = 0;
             this.chkOverrideTextColor.Text = "Override Layout Settings";
             this.chkOverrideTextColor.UseVisualStyleBackColor = true;
+            this.chkOverrideTextColor.CheckedChanged += new System.EventHandler(chkOverrideTextColor_CheckedChanged);
             // 
             // label1
             // 
@@ -203,6 +206,7 @@
             this.chkOverrideTimeColor.TabIndex = 0;
             this.chkOverrideTimeColor.Text = "Override Layout Settings";
             this.chkOverrideTimeColor.UseVisualStyleBackColor = true;
+            this.chkOverrideTimeColor.CheckedChanged += new System.EventHandler(chkOverrideTimeColor_CheckedChanged);
             // 
             // cmbGradientType
             // 
@@ -217,6 +221,7 @@
             this.cmbGradientType.Name = "cmbGradientType";
             this.cmbGradientType.Size = new System.Drawing.Size(239, 21);
             this.cmbGradientType.TabIndex = 2;
+            this.cmbGradientType.SelectedIndexChanged += new System.EventHandler(cmbGradientType_SelectedIndexChanged);
             // 
             // label11
             // 
@@ -265,6 +270,19 @@
             this.chkTwoRows.TabIndex = 3;
             this.chkTwoRows.Text = "Display 2 Rows";
             this.chkTwoRows.UseVisualStyleBackColor = true;
+            this.chkTwoRows.CheckedChanged += new System.EventHandler(this.chkTwoRows_CheckedChanged);
+            // 
+            // chkCenteredText
+            // 
+            this.chkCenteredText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkCenteredText.AutoSize = true;
+            this.chkCenteredText.Location = new System.Drawing.Point(224, 35);
+            this.chkCenteredText.Margin = new System.Windows.Forms.Padding(7, 3, 3, 3);
+            this.chkCenteredText.Name = "chkCenteredText";
+            this.chkCenteredText.Size = new System.Drawing.Size(235, 17);
+            this.chkCenteredText.TabIndex = 32;
+            this.chkCenteredText.Text = "Centered Text";
+            this.chkCenteredText.UseVisualStyleBackColor = true;
             // 
             // WorldRecordSettings
             // 
@@ -274,6 +292,7 @@
             this.Name = "WorldRecordSettings";
             this.Padding = new System.Windows.Forms.Padding(7);
             this.Size = new System.Drawing.Size(476, 239);
+            this.Load += new System.EventHandler(WorldRecordSettings_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -304,5 +323,6 @@
         private System.Windows.Forms.Button btnColor1;
         private System.Windows.Forms.Button btnColor2;
         private System.Windows.Forms.CheckBox chkTwoRows;
+        private System.Windows.Forms.CheckBox chkCenteredText;
     }
 }
