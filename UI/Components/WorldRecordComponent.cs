@@ -11,6 +11,7 @@ using System.Drawing.Drawing2D;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using SpeedrunComSharp;
 
 namespace LiveSplit.WorldRecord.UI.Components
 {
@@ -25,7 +26,8 @@ namespace LiveSplit.WorldRecord.UI.Components
         private LiveSplitState State { get; set; }
         private TripleDateTime LastUpdate { get; set; }
         private TimeSpan RefreshInterval { get; set; }
-        public OldSpeedrunCom.Record WorldRecord { get; protected set; }
+        public Record WorldRecord { get; protected set; }
+        private SpeedrunComClient Client { get; set; }
 
         public string ComponentName
         {
@@ -47,6 +49,8 @@ namespace LiveSplit.WorldRecord.UI.Components
         public WorldRecordComponent(LiveSplitState state)
         {
             State = state;
+
+            Client = new SpeedrunComClient(userAgent: "LiveSplit/" + LiveSplit.Updates.UpdateHelper.Version, maxCacheElements: 0);
 
             RefreshInterval = TimeSpan.FromMinutes(5);
             Cache = new GraphicsCache();
@@ -73,11 +77,11 @@ namespace LiveSplit.WorldRecord.UI.Components
             if (State != null && State.Run != null &&
                 !string.IsNullOrEmpty(State.Run.GameName) && !string.IsNullOrEmpty(State.Run.CategoryName))
             {
-                WorldRecord = OldSpeedrunCom.Instance.GetWorldRecord(State.Run.GameName, State.Run.CategoryName);
+                WorldRecord = Client.Records.GetWorldRecord(State.Run.GameName, State.Run.CategoryName);
             }
             else
             {
-                WorldRecord = default(OldSpeedrunCom.Record);
+                WorldRecord = null;
             }
 
             ShowWorldRecord();
@@ -85,20 +89,21 @@ namespace LiveSplit.WorldRecord.UI.Components
 
         private void ShowWorldRecord()
         {
-            if (WorldRecord.Runners != null)
+            if (WorldRecord != null)
             {
+                var time = WorldRecord.GetTime();
                 var timingMethod = State.CurrentTimingMethod;
-                if (!WorldRecord.Time[timingMethod].HasValue)
+                if (!time[timingMethod].HasValue)
                 {
-                    if (timingMethod == TimingMethod.RealTime)
-                        timingMethod = TimingMethod.GameTime;
+                    if (timingMethod == LiveSplit.Model.TimingMethod.RealTime)
+                        timingMethod = LiveSplit.Model.TimingMethod.GameTime;
                     else
-                        timingMethod = TimingMethod.RealTime;
+                        timingMethod = LiveSplit.Model.TimingMethod.RealTime;
                 }
 
-                var time = TimeFormatter.Format(WorldRecord.Time[timingMethod]);
-                var runners = WorldRecord.Runners.Aggregate((a, b) => a + " & " + b);
-                InternalComponent.InformationValue = string.Format("{0} by {1}", time, runners);
+                var formatted = TimeFormatter.Format(time[timingMethod]);
+                var runners = WorldRecord.PlayerNames.Aggregate((a, b) => a + " & " + b);
+                InternalComponent.InformationValue = string.Format("{0} by {1}", formatted, runners);
             }
             else
             {
@@ -161,14 +166,14 @@ namespace LiveSplit.WorldRecord.UI.Components
             InternalComponent.ValueLabel.ForeColor = Settings.OverrideTimeColor ? Settings.TimeColor : state.LayoutSettings.TextColor;
         }
 
-        public void DrawHorizontal(Graphics g, LiveSplitState state, float height, Region clipRegion)
+        public void DrawHorizontal(Graphics g, LiveSplitState state, float height, System.Drawing.Region clipRegion)
         {
             DrawBackground(g, state, HorizontalWidth, height);
             PrepareDraw(state);
             InternalComponent.DrawHorizontal(g, state, height, clipRegion);
         }
 
-        public void DrawVertical(Graphics g, LiveSplitState state, float width, Region clipRegion)
+        public void DrawVertical(Graphics g, LiveSplitState state, float width, System.Drawing.Region clipRegion)
         {
             DrawBackground(g, state, width, VerticalHeight);
             PrepareDraw(state);
