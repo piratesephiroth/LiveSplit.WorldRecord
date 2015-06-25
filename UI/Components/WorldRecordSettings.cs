@@ -136,6 +136,7 @@ namespace LiveSplit.UI.Components
             else
             {
                 chkCenteredText.Enabled = true;
+                chkCenteredText.DataBindings.Clear();
                 chkCenteredText.DataBindings.Add("Checked", this, "CenteredText", false, DataSourceUpdateMode.OnPropertyChanged);
             }
         }
