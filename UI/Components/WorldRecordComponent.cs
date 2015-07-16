@@ -70,10 +70,16 @@ namespace LiveSplit.WorldRecord.UI.Components
         {
             LastUpdate = TripleDateTime.Now;
 
-            if (State != null && State.Run != null &&
-                !string.IsNullOrEmpty(State.Run.GameName) && !string.IsNullOrEmpty(State.Run.CategoryName))
+            WorldRecord = null;
+
+            if (State != null && State.Run != null
+                && State.Run.Metadata.Game != null && State.Run.Metadata.Category != null)
             {
-                WorldRecord = Client.Records.GetWorldRecord(State.Run.GameName, State.Run.CategoryName);
+                var leaderboard = Client.Leaderboards.GetLeaderboardForFullGameCategory(State.Run.Metadata.Game.ID, State.Run.Metadata.Category.ID);
+                if (leaderboard != null)
+                {
+                    WorldRecord = leaderboard.Records.FirstOrDefault();
+                }
             }
             else
             {
@@ -87,7 +93,7 @@ namespace LiveSplit.WorldRecord.UI.Components
         {
             if (WorldRecord != null)
             {
-                var time = WorldRecord.GetTime();
+                var time = WorldRecord.Times.ToTime();
                 var timingMethod = State.CurrentTimingMethod;
                 if (!time[timingMethod].HasValue)
                 {
@@ -98,7 +104,7 @@ namespace LiveSplit.WorldRecord.UI.Components
                 }
 
                 var formatted = TimeFormatter.Format(time[timingMethod]);
-                var runners = WorldRecord.PlayerNames.Aggregate((a, b) => a + " & " + b);
+                var runners = string.Join(" & ", WorldRecord.Players.Select(x => x.Name));
 
                 if (Settings.CenteredText && !Settings.Display2Rows)
                 {
