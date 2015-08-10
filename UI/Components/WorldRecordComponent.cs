@@ -23,7 +23,7 @@ namespace LiveSplit.WorldRecord.UI.Components
         private GraphicsCache Cache { get; set; }
         private ITimeFormatter TimeFormatter { get; set; }
         private LiveSplitState State { get; set; }
-        private TripleDateTime LastUpdate { get; set; }
+        private TimeStamp LastUpdate { get; set; }
         private TimeSpan RefreshInterval { get; set; }
         public SpeedrunCom.Record WorldRecord { get; protected set; }
 
@@ -64,7 +64,7 @@ namespace LiveSplit.WorldRecord.UI.Components
 
         private void RefreshWorldRecord()
         {
-            LastUpdate = TripleDateTime.Now;
+            LastUpdate = TimeStamp.Now;
 
             if (State != null && State.Run != null &&
                 !string.IsNullOrEmpty(State.Run.GameName) && !string.IsNullOrEmpty(State.Run.CategoryName))
@@ -130,7 +130,7 @@ namespace LiveSplit.WorldRecord.UI.Components
             Cache["Game"] = state.Run.GameName;
             Cache["Category"] = state.Run.CategoryName;
 
-            if (Cache.HasChanged || (LastUpdate != null && TripleDateTime.Now - LastUpdate >= RefreshInterval))
+            if (Cache.HasChanged || (LastUpdate != null && TimeStamp.Now - LastUpdate >= RefreshInterval))
             {
                 Task.Factory.StartNew(RefreshWorldRecord);
             }
