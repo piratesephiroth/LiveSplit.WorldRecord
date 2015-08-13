@@ -11,6 +11,7 @@ using System.Drawing.Drawing2D;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using SpeedrunComSharp;
 
 namespace LiveSplit.WorldRecord.UI.Components
 {
@@ -25,7 +26,8 @@ namespace LiveSplit.WorldRecord.UI.Components
         private LiveSplitState State { get; set; }
         private TripleDateTime LastUpdate { get; set; }
         private TimeSpan RefreshInterval { get; set; }
-        public SpeedrunCom.Record WorldRecord { get; protected set; }
+        public Record WorldRecord { get; protected set; }
+        private SpeedrunComClient Client { get; set; }
 
         public string ComponentName
         {
@@ -48,6 +50,8 @@ namespace LiveSplit.WorldRecord.UI.Components
         {
             State = state;
 
+            Client = new SpeedrunComClient(userAgent: "LiveSplit/" + LiveSplit.Updates.UpdateHelper.Version, maxCacheElements: 0);
+
             RefreshInterval = TimeSpan.FromMinutes(5);
             Cache = new GraphicsCache();
             TimeFormatter = new RegularTimeFormatter();
@@ -66,14 +70,20 @@ namespace LiveSplit.WorldRecord.UI.Components
         {
             LastUpdate = TripleDateTime.Now;
 
-            if (State != null && State.Run != null &&
-                !string.IsNullOrEmpty(State.Run.GameName) && !string.IsNullOrEmpty(State.Run.CategoryName))
+            WorldRecord = null;
+
+            if (State != null && State.Run != null
+                && State.Run.Metadata.Game != null && State.Run.Metadata.Category != null)
             {
-                WorldRecord = SpeedrunCom.Instance.GetWorldRecord(State.Run.GameName, State.Run.CategoryName);
+                var leaderboard = Client.Leaderboards.GetLeaderboardForFullGameCategory(State.Run.Metadata.Game.ID, State.Run.Metadata.Category.ID);
+                if (leaderboard != null)
+                {
+                    WorldRecord = leaderboard.Records.FirstOrDefault();
+                }
             }
             else
             {
-                WorldRecord = default(SpeedrunCom.Record);
+                WorldRecord = null;
             }
 
             ShowWorldRecord();
@@ -81,33 +91,34 @@ namespace LiveSplit.WorldRecord.UI.Components
 
         private void ShowWorldRecord()
         {
-            if (WorldRecord.Runners != null)
+            if (WorldRecord != null)
             {
+                var time = WorldRecord.Times.ToTime();
                 var timingMethod = State.CurrentTimingMethod;
-                if (!WorldRecord.Time[timingMethod].HasValue)
+                if (!time[timingMethod].HasValue)
                 {
-                    if (timingMethod == TimingMethod.RealTime)
-                        timingMethod = TimingMethod.GameTime;
+                    if (timingMethod == LiveSplit.Model.TimingMethod.RealTime)
+                        timingMethod = LiveSplit.Model.TimingMethod.GameTime;
                     else
-                        timingMethod = TimingMethod.RealTime;
+                        timingMethod = LiveSplit.Model.TimingMethod.RealTime;
                 }
 
-                var time = TimeFormatter.Format(WorldRecord.Time[timingMethod]);
-                var runners = WorldRecord.Runners.Aggregate((a, b) => a + " & " + b);
+                var formatted = TimeFormatter.Format(time[timingMethod]);
+                var runners = string.Join(" & ", WorldRecord.Players.Select(x => x.Name));
 
                 if (Settings.CenteredText && !Settings.Display2Rows)
                 {
-                    InternalComponent.InformationName = string.Format("World Record is {0} by {1}", time, runners);
+                    InternalComponent.InformationName = string.Format("World Record is {0} by {1}", formatted, runners);
                     InternalComponent.AlternateNameText = new[]
                     {
-                        string.Format("World Record: {0} by {1}", time, runners),
-                        string.Format("WR: {0} by {1}", time, runners),
-                        string.Format("WR is {0} by {1}", time, runners)
+                        string.Format("World Record: {0} by {1}", formatted, runners),
+                        string.Format("WR: {0} by {1}", formatted, runners),
+                        string.Format("WR is {0} by {1}", formatted, runners)
                     };
                 }
                 else
                 {
-                    InternalComponent.InformationValue = string.Format("{0} by {1}", time, runners);
+                    InternalComponent.InformationValue = string.Format("{0} by {1}", formatted, runners);
                 }
             }
             else
@@ -202,14 +213,14 @@ namespace LiveSplit.WorldRecord.UI.Components
             InternalComponent.ValueLabel.ForeColor = Settings.OverrideTimeColor ? Settings.TimeColor : state.LayoutSettings.TextColor;
         }
 
-        public void DrawHorizontal(Graphics g, LiveSplitState state, float height, Region clipRegion)
+        public void DrawHorizontal(Graphics g, LiveSplitState state, float height, System.Drawing.Region clipRegion)
         {
             DrawBackground(g, state, HorizontalWidth, height);
             PrepareDraw(state, LayoutMode.Horizontal);
             InternalComponent.DrawHorizontal(g, state, height, clipRegion);
         }
 
-        public void DrawVertical(Graphics g, LiveSplitState state, float width, Region clipRegion)
+        public void DrawVertical(Graphics g, LiveSplitState state, float width, System.Drawing.Region clipRegion)
         {
             DrawBackground(g, state, width, VerticalHeight);
             PrepareDraw(state, LayoutMode.Vertical);
