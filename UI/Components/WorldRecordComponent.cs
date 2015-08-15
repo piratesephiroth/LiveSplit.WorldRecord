@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using System.Xml;
 using SpeedrunComSharp;
 using System.Collections.ObjectModel;
+using LiveSplit.Options;
 
 namespace LiveSplit.WorldRecord.UI.Components
 {
@@ -74,21 +75,35 @@ namespace LiveSplit.WorldRecord.UI.Components
 
             WorldRecord = null;
 
-            if (State != null && State.Run != null
-                && State.Run.Metadata.Game != null && State.Run.Metadata.Category != null)
+            try
             {
-                TimeFormatter = new RegularTimeFormatter(State.Run.Metadata.Game.Ruleset.ShowMilliseconds ? TimeAccuracy.Hundredths : TimeAccuracy.Seconds);
-
-                var leaderboard = Client.Categories.GetRecords(State.Run.Metadata.Category.ID, top: 1).First();
-                if (leaderboard != null)
+                if (State != null && State.Run != null
+                    && State.Run.Metadata.Game != null && State.Run.Metadata.Category != null)
                 {
-                    WorldRecord = leaderboard.Records.FirstOrDefault();
-                    AllTies = leaderboard.Records;
+                    TimeFormatter = new RegularTimeFormatter(State.Run.Metadata.Game.Ruleset.ShowMilliseconds ? TimeAccuracy.Hundredths : TimeAccuracy.Seconds);
+
+                    var variableFilter = Settings.FilterVariables ? State.Run.Metadata.VariableValues.Values : null;
+                    var regionFilter = Settings.FilterRegion && State.Run.Metadata.Region != null ? State.Run.Metadata.Region.ID : null;
+                    var platformFilter = Settings.FilterPlatform && State.Run.Metadata.Platform != null ? State.Run.Metadata.Platform.ID : null;
+                    EmulatorsFilter emulatorFilter = EmulatorsFilter.NotSet;
+                    if (Settings.FilterPlatform)
+                    {
+                        if (State.Run.Metadata.UsesEmulator)
+                            emulatorFilter = EmulatorsFilter.OnlyEmulators;
+                        else
+                            emulatorFilter = EmulatorsFilter.NoEmulators;
+                    }
+                    var leaderboard = Client.Leaderboards.GetLeaderboardForFullGameCategory(State.Run.Metadata.Game.ID, State.Run.Metadata.Category.ID, top: 1, platformId: platformFilter, regionId: regionFilter, emulatorsFilter: emulatorFilter, variableFilters: variableFilter);
+                    if (leaderboard != null)
+                    {
+                        WorldRecord = leaderboard.Records.FirstOrDefault();
+                        AllTies = leaderboard.Records;
+                    }
                 }
             }
-            else
+            catch (Exception ex)
             {
-                WorldRecord = null;
+                Log.Error(ex);
             }
 
             ShowWorldRecord();
@@ -166,6 +181,10 @@ namespace LiveSplit.WorldRecord.UI.Components
             Cache.Restart();
             Cache["Game"] = state.Run.GameName;
             Cache["Category"] = state.Run.CategoryName;
+            Cache["PlatformID"] = Settings.FilterPlatform ? state.Run.Metadata.PlatformName : null;
+            Cache["RegionID"] = Settings.FilterRegion ? state.Run.Metadata.RegionName : null;
+            Cache["UsesEmulator"] = Settings.FilterPlatform ? (bool?)state.Run.Metadata.UsesEmulator : null;
+            Cache["Variables"] = Settings.FilterVariables ? string.Join(",", state.Run.Metadata.VariableValueNames.Values) : null;
 
             if (Cache.HasChanged || (LastUpdate != null && TripleDateTime.Now - LastUpdate >= RefreshInterval))
             {

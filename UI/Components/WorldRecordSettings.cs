@@ -26,6 +26,10 @@ namespace LiveSplit.UI.Components
         public bool Display2Rows { get; set; }
         public bool CenteredText { get; set; }
 
+        public bool FilterVariables { get; set; }
+        public bool FilterPlatform { get; set; }
+        public bool FilterRegion { get; set; }
+
         public LayoutMode Mode { get; set; }
 
         public WorldRecordSettings()
@@ -41,6 +45,9 @@ namespace LiveSplit.UI.Components
             BackgroundGradient = GradientType.Plain;
             Display2Rows = false;
             CenteredText = true;
+            FilterVariables = false;
+            FilterPlatform = false;
+            FilterRegion = false;
 
             chkOverrideTextColor.DataBindings.Add("Checked", this, "OverrideTextColor", false, DataSourceUpdateMode.OnPropertyChanged);
             btnTextColor.DataBindings.Add("BackColor", this, "TextColor", false, DataSourceUpdateMode.OnPropertyChanged);
@@ -49,6 +56,9 @@ namespace LiveSplit.UI.Components
             cmbGradientType.DataBindings.Add("SelectedItem", this, "GradientString", false, DataSourceUpdateMode.OnPropertyChanged);
             btnColor1.DataBindings.Add("BackColor", this, "BackgroundColor", false, DataSourceUpdateMode.OnPropertyChanged);
             btnColor2.DataBindings.Add("BackColor", this, "BackgroundColor2", false, DataSourceUpdateMode.OnPropertyChanged);
+            chkRegion.DataBindings.Add("Checked", this, "FilterRegion", false, DataSourceUpdateMode.OnPropertyChanged);
+            chkPlatform.DataBindings.Add("Checked", this, "FilterPlatform", false, DataSourceUpdateMode.OnPropertyChanged);
+            chkVariables.DataBindings.Add("Checked", this, "FilterVariables", false, DataSourceUpdateMode.OnPropertyChanged);
         }
 
         void chkOverrideTimeColor_CheckedChanged(object sender, EventArgs e)
@@ -100,6 +110,9 @@ namespace LiveSplit.UI.Components
             GradientString = SettingsHelper.ParseString(element["BackgroundGradient"]);
             Display2Rows = SettingsHelper.ParseBool(element["Display2Rows"]);
             CenteredText = SettingsHelper.ParseBool(element["CenteredText"]);
+            FilterRegion = SettingsHelper.ParseBool(element["FilterRegion"]);
+            FilterPlatform = SettingsHelper.ParseBool(element["FilterPlatform"]);
+            FilterVariables = SettingsHelper.ParseBool(element["FilterVariables"]);
         }
 
         public XmlNode GetSettings(XmlDocument document)
@@ -115,6 +128,9 @@ namespace LiveSplit.UI.Components
             parent.AppendChild(SettingsHelper.ToElement(document, "BackgroundGradient", BackgroundGradient));
             parent.AppendChild(SettingsHelper.ToElement(document, "Display2Rows", Display2Rows));
             parent.AppendChild(SettingsHelper.ToElement(document, "CenteredText", CenteredText));
+            parent.AppendChild(SettingsHelper.ToElement(document, "FilterRegion", FilterRegion));
+            parent.AppendChild(SettingsHelper.ToElement(document, "FilterPlatform", FilterPlatform));
+            parent.AppendChild(SettingsHelper.ToElement(document, "FilterVariables", FilterVariables));
             return parent;
         }
 
