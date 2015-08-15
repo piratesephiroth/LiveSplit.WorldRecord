@@ -30,6 +30,7 @@ namespace LiveSplit.WorldRecord.UI.Components
         private TimeSpan RefreshInterval { get; set; }
         public Record WorldRecord { get; protected set; }
         public ReadOnlyCollection<Record> AllTies { get; protected set; }
+        private bool IsLoading { get; set; }
         private SpeedrunComClient Client { get; set; }
 
         public string ComponentName
@@ -106,6 +107,7 @@ namespace LiveSplit.WorldRecord.UI.Components
                 Log.Error(ex);
             }
 
+            IsLoading = false;
             ShowWorldRecord();
         }
 
@@ -124,7 +126,20 @@ namespace LiveSplit.WorldRecord.UI.Components
                 }
 
                 var formatted = TimeFormatter.Format(time[timingMethod]);
-                var runners = string.Join(", ", AllTies.Select(t => string.Join(" & ", t.Players.Select(p => p.Name))));
+                var isLoggedIn = SpeedrunCom.Client.IsAccessTokenValid;
+                var userName = SpeedrunCom.Client.Profile.GetProfile().Name;
+
+                var runners = string.Join(", ", AllTies.Select(t => string.Join(" & ", t.Players.Select(p =>
+                    isLoggedIn && p.Name == userName ? "me" : p.Name))));
+                var tieCount = AllTies.Count;
+
+                var finalTime = GetPBTime(timingMethod);
+                if (finalTime < time[timingMethod])
+                {
+                    formatted = TimeFormatter.Format(finalTime);
+                    runners = State.Run.Metadata.Category.Players.Value > 1 ? "us" : "me";
+                    tieCount = 1;
+                }
 
                 if (Settings.CenteredText && !Settings.Display2Rows)
                 {
@@ -134,8 +149,6 @@ namespace LiveSplit.WorldRecord.UI.Components
                     textList.Add(string.Format("World Record: {0} by {1}", formatted, runners));
                     textList.Add(string.Format("WR: {0} by {1}", formatted, runners));
                     textList.Add(string.Format("WR is {0} by {1}", formatted, runners));
-
-                    var tieCount = AllTies.Count;
 
                     if (tieCount > 1)
                     {
@@ -150,8 +163,6 @@ namespace LiveSplit.WorldRecord.UI.Components
                 }
                 else
                 {
-                    var tieCount = AllTies.Count;
-
                     if (tieCount > 1)
                     {
                         InternalComponent.InformationValue = string.Format("{0} ({1}-way tie)", formatted, tieCount);
@@ -160,6 +171,18 @@ namespace LiveSplit.WorldRecord.UI.Components
                     {
                         InternalComponent.InformationValue = string.Format("{0} by {1}", formatted, runners);
                     }
+                }
+            }
+            else if (IsLoading)
+            {
+                if (Settings.CenteredText && !Settings.Display2Rows)
+                {
+                    InternalComponent.InformationName = "Loading World Record...";
+                    InternalComponent.AlternateNameText = new[] { "Loading WR..." };
+                }
+                else
+                {
+                    InternalComponent.InformationValue = "Loading...";
                 }
             }
             else
@@ -176,6 +199,17 @@ namespace LiveSplit.WorldRecord.UI.Components
             }
         }
 
+        private TimeSpan? GetPBTime(LiveSplit.Model.TimingMethod method)
+        {
+            var lastSplit = State.Run.Last();
+            var pbTime = lastSplit.PersonalBestSplitTime[method];
+            var splitTime = lastSplit.SplitTime[method];
+
+            if (State.CurrentPhase == TimerPhase.Ended && splitTime < pbTime)
+                return splitTime;
+            return pbTime;
+        }
+
         public void Update(IInvalidator invalidator, LiveSplitState state, float width, float height, LayoutMode mode)
         {
             Cache.Restart();
@@ -186,7 +220,14 @@ namespace LiveSplit.WorldRecord.UI.Components
             Cache["UsesEmulator"] = Settings.FilterPlatform ? (bool?)state.Run.Metadata.UsesEmulator : null;
             Cache["Variables"] = Settings.FilterVariables ? string.Join(",", state.Run.Metadata.VariableValueNames.Values) : null;
 
-            if (Cache.HasChanged || (LastUpdate != null && TripleDateTime.Now - LastUpdate >= RefreshInterval))
+            if (Cache.HasChanged)
+            {
+                IsLoading = true;
+                WorldRecord = null;
+                ShowWorldRecord();
+                Task.Factory.StartNew(RefreshWorldRecord);
+            }
+            else if (LastUpdate != null && TripleDateTime.Now - LastUpdate >= RefreshInterval)
             {
                 Task.Factory.StartNew(RefreshWorldRecord);
             }
@@ -194,6 +235,8 @@ namespace LiveSplit.WorldRecord.UI.Components
             {
                 Cache["TimingMethod"] = state.CurrentTimingMethod;
                 Cache["CenteredText"] = Settings.CenteredText && !Settings.Display2Rows;
+                Cache["RealPBTime"] = GetPBTime(Model.TimingMethod.RealTime);
+                Cache["GamePBTime"] = GetPBTime(Model.TimingMethod.GameTime);
 
                 if (Cache.HasChanged)
                 {
