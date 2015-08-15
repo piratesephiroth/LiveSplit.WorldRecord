@@ -26,7 +26,7 @@ namespace LiveSplit.WorldRecord.UI.Components
         private GraphicsCache Cache { get; set; }
         private ITimeFormatter TimeFormatter { get; set; }
         private LiveSplitState State { get; set; }
-        private TripleDateTime LastUpdate { get; set; }
+        private TimeStamp LastUpdate { get; set; }
         private TimeSpan RefreshInterval { get; set; }
         public Record WorldRecord { get; protected set; }
         public ReadOnlyCollection<Record> AllTies { get; protected set; }
@@ -72,7 +72,7 @@ namespace LiveSplit.WorldRecord.UI.Components
 
         private void RefreshWorldRecord()
         {
-            LastUpdate = TripleDateTime.Now;
+            LastUpdate = TimeStamp.Now;
 
             WorldRecord = null;
 
@@ -227,7 +227,7 @@ namespace LiveSplit.WorldRecord.UI.Components
                 ShowWorldRecord();
                 Task.Factory.StartNew(RefreshWorldRecord);
             }
-            else if (LastUpdate != null && TripleDateTime.Now - LastUpdate >= RefreshInterval)
+            else if (LastUpdate != null && TimeStamp.Now - LastUpdate >= RefreshInterval)
             {
                 Task.Factory.StartNew(RefreshWorldRecord);
             }
