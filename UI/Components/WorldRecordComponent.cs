@@ -75,6 +75,8 @@ namespace LiveSplit.WorldRecord.UI.Components
             if (State != null && State.Run != null
                 && State.Run.Metadata.Game != null && State.Run.Metadata.Category != null)
             {
+                TimeFormatter = new RegularTimeFormatter(State.Run.Metadata.Game.Ruleset.ShowMilliseconds ? TimeAccuracy.Hundredths : TimeAccuracy.Seconds);
+
                 var leaderboard = Client.Leaderboards.GetLeaderboardForFullGameCategory(State.Run.Metadata.Game.ID, State.Run.Metadata.Category.ID);
                 if (leaderboard != null)
                 {
