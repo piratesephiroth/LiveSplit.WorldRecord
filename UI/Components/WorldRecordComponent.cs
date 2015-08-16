@@ -330,5 +330,10 @@ namespace LiveSplit.WorldRecord.UI.Components
         {
             Settings.SetSettings(settings);
         }
+
+        public int GetSettingsHashCode()
+        {
+            return Settings.GetSettingsHashCode();
+        }
     }
 }

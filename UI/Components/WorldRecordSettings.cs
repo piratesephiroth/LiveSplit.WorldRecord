@@ -118,20 +118,30 @@ namespace LiveSplit.UI.Components
         public XmlNode GetSettings(XmlDocument document)
         {
             var parent = document.CreateElement("Settings");
-            parent.AppendChild(SettingsHelper.ToElement(document, "Version", "1.6"));
-            parent.AppendChild(SettingsHelper.ToElement(document, TextColor, "TextColor"));
-            parent.AppendChild(SettingsHelper.ToElement(document, "OverrideTextColor", OverrideTextColor));
-            parent.AppendChild(SettingsHelper.ToElement(document, TimeColor, "TimeColor"));
-            parent.AppendChild(SettingsHelper.ToElement(document, "OverrideTimeColor", OverrideTimeColor));
-            parent.AppendChild(SettingsHelper.ToElement(document, BackgroundColor, "BackgroundColor"));
-            parent.AppendChild(SettingsHelper.ToElement(document, BackgroundColor2, "BackgroundColor2"));
-            parent.AppendChild(SettingsHelper.ToElement(document, "BackgroundGradient", BackgroundGradient));
-            parent.AppendChild(SettingsHelper.ToElement(document, "Display2Rows", Display2Rows));
-            parent.AppendChild(SettingsHelper.ToElement(document, "CenteredText", CenteredText));
-            parent.AppendChild(SettingsHelper.ToElement(document, "FilterRegion", FilterRegion));
-            parent.AppendChild(SettingsHelper.ToElement(document, "FilterPlatform", FilterPlatform));
-            parent.AppendChild(SettingsHelper.ToElement(document, "FilterVariables", FilterVariables));
+            CreateSettingsNode(document, parent);
             return parent;
+        }
+
+        public int GetSettingsHashCode()
+        {
+            return CreateSettingsNode(null, null);
+        }
+
+        private int CreateSettingsNode(XmlDocument document, XmlElement parent)
+        {
+            return SettingsHelper.CreateSetting(document, parent, "Version", "1.6") ^
+            SettingsHelper.CreateSetting(document, parent, "TextColor", TextColor) ^
+            SettingsHelper.CreateSetting(document, parent, "OverrideTextColor", OverrideTextColor) ^
+            SettingsHelper.CreateSetting(document, parent, "TimeColor", TimeColor) ^
+            SettingsHelper.CreateSetting(document, parent, "OverrideTimeColor", OverrideTimeColor) ^
+            SettingsHelper.CreateSetting(document, parent, "BackgroundColor", BackgroundColor) ^
+            SettingsHelper.CreateSetting(document, parent, "BackgroundColor2", BackgroundColor2) ^
+            SettingsHelper.CreateSetting(document, parent, "BackgroundGradient", BackgroundGradient) ^
+            SettingsHelper.CreateSetting(document, parent, "Display2Rows", Display2Rows) ^
+            SettingsHelper.CreateSetting(document, parent, "CenteredText", CenteredText) ^
+            SettingsHelper.CreateSetting(document, parent, "FilterRegion", FilterRegion) ^
+            SettingsHelper.CreateSetting(document, parent, "FilterPlatform", FilterPlatform) ^
+            SettingsHelper.CreateSetting(document, parent, "FilterVariables", FilterVariables);
         }
 
         private void ColorButtonClick(object sender, EventArgs e)
