@@ -127,7 +127,9 @@ namespace LiveSplit.WorldRecord.UI.Components
 
                 var formatted = TimeFormatter.Format(time[timingMethod]);
                 var isLoggedIn = SpeedrunCom.Client.IsAccessTokenValid;
-                var userName = SpeedrunCom.Client.Profile.GetProfile().Name;
+                var userName = string.Empty;
+                if (isLoggedIn)
+                    userName = SpeedrunCom.Client.Profile.GetProfile().Name;
 
                 var runners = string.Join(", ", AllTies.Select(t => string.Join(" & ", t.Players.Select(p =>
                     isLoggedIn && p.Name == userName ? "me" : p.Name))));
