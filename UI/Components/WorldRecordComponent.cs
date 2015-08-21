@@ -54,7 +54,7 @@ namespace LiveSplit.WorldRecord.UI.Components
         {
             State = state;
 
-            Client = new SpeedrunComClient(userAgent: "LiveSplit/" + LiveSplit.Updates.UpdateHelper.Version, maxCacheElements: 0);
+            Client = new SpeedrunComClient(userAgent: "LiveSplit/" + Updates.UpdateHelper.Version, maxCacheElements: 0);
 
             RefreshInterval = TimeSpan.FromMinutes(5);
             Cache = new GraphicsCache();
@@ -94,7 +94,12 @@ namespace LiveSplit.WorldRecord.UI.Components
                         else
                             emulatorFilter = EmulatorsFilter.NoEmulators;
                     }
-                    var leaderboard = Client.Leaderboards.GetLeaderboardForFullGameCategory(State.Run.Metadata.Game.ID, State.Run.Metadata.Category.ID, top: 1, platformId: platformFilter, regionId: regionFilter, emulatorsFilter: emulatorFilter, variableFilters: variableFilter);
+
+                    var leaderboard = Client.Leaderboards.GetLeaderboardForFullGameCategory(State.Run.Metadata.Game.ID, State.Run.Metadata.Category.ID, 
+                        top: 1,
+                        platformId: platformFilter, regionId: regionFilter, 
+                        emulatorsFilter: emulatorFilter, variableFilters: variableFilter);
+
                     if (leaderboard != null)
                     {
                         WorldRecord = leaderboard.Records.FirstOrDefault();
@@ -115,17 +120,15 @@ namespace LiveSplit.WorldRecord.UI.Components
         {
             if (WorldRecord != null)
             {
-                var time = WorldRecord.Times.ToTime();
+                var time = WorldRecord.Times.Primary;
                 var timingMethod = State.CurrentTimingMethod;
-                if (!time[timingMethod].HasValue)
+                var game = State.Run.Metadata.Game;
+                if (game != null)
                 {
-                    if (timingMethod == LiveSplit.Model.TimingMethod.RealTime)
-                        timingMethod = LiveSplit.Model.TimingMethod.GameTime;
-                    else
-                        timingMethod = LiveSplit.Model.TimingMethod.RealTime;
+                    timingMethod = game.Ruleset.DefaultTimingMethod.ToLiveSplitTimingMethod();
                 }
 
-                var formatted = TimeFormatter.Format(time[timingMethod]);
+                var formatted = TimeFormatter.Format(time);
                 var isLoggedIn = SpeedrunCom.Client.IsAccessTokenValid;
                 var userName = string.Empty;
                 if (isLoggedIn)
@@ -136,7 +139,7 @@ namespace LiveSplit.WorldRecord.UI.Components
                 var tieCount = AllTies.Count;
 
                 var finalTime = GetPBTime(timingMethod);
-                if (finalTime < time[timingMethod])
+                if (finalTime < time)
                 {
                     formatted = TimeFormatter.Format(finalTime);
                     runners = State.Run.Metadata.Category.Players.Value > 1 ? "us" : "me";
@@ -201,7 +204,7 @@ namespace LiveSplit.WorldRecord.UI.Components
             }
         }
 
-        private TimeSpan? GetPBTime(LiveSplit.Model.TimingMethod method)
+        private TimeSpan? GetPBTime(Model.TimingMethod method)
         {
             var lastSplit = State.Run.Last();
             var pbTime = lastSplit.PersonalBestSplitTime[method];
@@ -235,7 +238,6 @@ namespace LiveSplit.WorldRecord.UI.Components
             }
             else
             {
-                Cache["TimingMethod"] = state.CurrentTimingMethod;
                 Cache["CenteredText"] = Settings.CenteredText && !Settings.Display2Rows;
                 Cache["RealPBTime"] = GetPBTime(Model.TimingMethod.RealTime);
                 Cache["GamePBTime"] = GetPBTime(Model.TimingMethod.GameTime);
