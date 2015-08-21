@@ -58,7 +58,7 @@ namespace LiveSplit.WorldRecord.UI.Components
 
             RefreshInterval = TimeSpan.FromMinutes(5);
             Cache = new GraphicsCache();
-            TimeFormatter = new RegularTimeFormatter();
+            TimeFormatter = new AutomaticPrecisionTimeFormatter();
             InternalComponent = new InfoTextComponent("World Record", "-");
             Settings = new WorldRecordSettings()
             {
@@ -81,8 +81,6 @@ namespace LiveSplit.WorldRecord.UI.Components
                 if (State != null && State.Run != null
                     && State.Run.Metadata.Game != null && State.Run.Metadata.Category != null)
                 {
-                    TimeFormatter = new RegularTimeFormatter(State.Run.Metadata.Game.Ruleset.ShowMilliseconds ? TimeAccuracy.Hundredths : TimeAccuracy.Seconds);
-
                     var variableFilter = Settings.FilterVariables ? State.Run.Metadata.VariableValues.Values : null;
                     var regionFilter = Settings.FilterRegion && State.Run.Metadata.Region != null ? State.Run.Metadata.Region.ID : null;
                     var platformFilter = Settings.FilterPlatform && State.Run.Metadata.Platform != null ? State.Run.Metadata.Platform.ID : null;
