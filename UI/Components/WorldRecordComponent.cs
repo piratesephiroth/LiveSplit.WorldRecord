@@ -130,7 +130,7 @@ namespace LiveSplit.WorldRecord.UI.Components
                 var isLoggedIn = SpeedrunCom.Client.IsAccessTokenValid;
                 var userName = string.Empty;
                 if (isLoggedIn)
-                    userName = SpeedrunCom.Client.Profile.GetProfile().Name;
+                    userName = SpeedrunCom.Client.Profile.Name;
 
                 var runners = string.Join(", ", AllTies.Select(t => string.Join(" & ", t.Players.Select(p =>
                     isLoggedIn && p.Name == userName ? "me" : p.Name))));
