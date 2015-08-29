@@ -53,7 +53,7 @@ namespace LiveSplit.WorldRecord.UI.Components
 
         public Version Version
         {
-            get { return Version.Parse("1.0.0"); }
+            get { return Version.Parse("1.6"); }
         }
     }
 }
