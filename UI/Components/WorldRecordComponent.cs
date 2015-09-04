@@ -25,6 +25,7 @@ namespace LiveSplit.WorldRecord.UI.Components
 
         private GraphicsCache Cache { get; set; }
         private ITimeFormatter TimeFormatter { get; set; }
+        private RegularTimeFormatter LocalTimeFormatter { get; set; }
         private LiveSplitState State { get; set; }
         private TimeStamp LastUpdate { get; set; }
         private TimeSpan RefreshInterval { get; set; }
@@ -59,6 +60,7 @@ namespace LiveSplit.WorldRecord.UI.Components
             RefreshInterval = TimeSpan.FromMinutes(5);
             Cache = new GraphicsCache();
             TimeFormatter = new AutomaticPrecisionTimeFormatter();
+            LocalTimeFormatter = new RegularTimeFormatter();
             InternalComponent = new InfoTextComponent("World Record", "-");
             Settings = new WorldRecordSettings()
             {
@@ -124,6 +126,7 @@ namespace LiveSplit.WorldRecord.UI.Components
                 if (game != null)
                 {
                     timingMethod = game.Ruleset.DefaultTimingMethod.ToLiveSplitTimingMethod();
+                    LocalTimeFormatter.Accuracy = game.Ruleset.ShowMilliseconds ? TimeAccuracy.Hundredths : TimeAccuracy.Seconds;
                 }
 
                 var formatted = TimeFormatter.Format(time);
@@ -139,7 +142,7 @@ namespace LiveSplit.WorldRecord.UI.Components
                 var finalTime = GetPBTime(timingMethod);
                 if (finalTime < time)
                 {
-                    formatted = TimeFormatter.Format(finalTime);
+                    formatted = LocalTimeFormatter.Format(finalTime);
                     runners = State.Run.Metadata.Category.Players.Value > 1 ? "us" : "me";
                     tieCount = 1;
                 }
