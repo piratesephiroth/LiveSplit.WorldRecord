@@ -8,52 +8,20 @@ namespace LiveSplit.WorldRecord.UI.Components
 {
     public class WorldRecordFactory : IComponentFactory
     {
-        public string ComponentName
-        {
-            get { return "World Record"; }
-        }
+        public string ComponentName => "World Record";
 
-        public string Description
-        {
-            get { return "Shows the World Record for the run"; }
-        }
+        public string Description => "Shows the World Record for the run";
 
-        public ComponentCategory Category
-        {
-            get { return ComponentCategory.Information; }
-        }
+        public ComponentCategory Category => ComponentCategory.Information;
 
-        public IComponent Create(LiveSplitState state)
-        {
-            return new WorldRecordComponent(state);
-        }
+        public IComponent Create(LiveSplitState state) => new WorldRecordComponent(state);
 
-        public string UpdateName
-        {
-            get { return ComponentName; }
-        }
+        public string UpdateName => ComponentName;
 
-        public string XMLURL
-        {
-#if RELEASE_CANDIDATE
-            get { return "http://livesplit.org/update_rc_sdhjdop/Components/update.LiveSplit.WorldRecord.xml"; }
-#else
-            get { return "http://livesplit.org/update/Components/update.LiveSplit.WorldRecord.xml"; }
-#endif
-        }
+        public string XMLURL => "http://livesplit.org/update/Components/update.LiveSplit.WorldRecord.xml";
 
-        public string UpdateURL
-        {
-#if RELEASE_CANDIDATE
-            get { return "http://livesplit.org/update_rc_sdhjdop/"; }
-#else
-            get { return "http://livesplit.org/update/"; }
-#endif
-        }
+        public string UpdateURL => "http://livesplit.org/update/";
 
-        public Version Version
-        {
-            get { return Version.Parse("1.6.1"); }
-        }
+        public Version Version => Version.Parse("1.6.1");
     }
 }

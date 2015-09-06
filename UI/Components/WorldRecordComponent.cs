@@ -34,28 +34,25 @@ namespace LiveSplit.WorldRecord.UI.Components
         private bool IsLoading { get; set; }
         private SpeedrunComClient Client { get; set; }
 
-        public string ComponentName
-        {
-            get { return "World Record"; }
-        }
+        public string ComponentName => "World Record";
 
-        public float PaddingTop { get { return InternalComponent.PaddingTop; } }
-        public float PaddingLeft { get { return InternalComponent.PaddingLeft; } }
-        public float PaddingBottom { get { return InternalComponent.PaddingBottom; } }
-        public float PaddingRight { get { return InternalComponent.PaddingRight; } }
+        public float PaddingTop => InternalComponent.PaddingTop;
+        public float PaddingLeft => InternalComponent.PaddingLeft;
+        public float PaddingBottom => InternalComponent.PaddingBottom;
+        public float PaddingRight => InternalComponent.PaddingRight;
 
-        public float VerticalHeight { get { return InternalComponent.VerticalHeight; } }
-        public float MinimumWidth { get { return InternalComponent.MinimumWidth; } }
-        public float HorizontalWidth { get { return InternalComponent.HorizontalWidth; } }
-        public float MinimumHeight { get { return InternalComponent.MinimumHeight; } }
+        public float VerticalHeight => InternalComponent.VerticalHeight;
+        public float MinimumWidth => InternalComponent.MinimumWidth;
+        public float HorizontalWidth => InternalComponent.HorizontalWidth;
+        public float MinimumHeight => InternalComponent.MinimumHeight;
 
-        public IDictionary<string, Action> ContextMenuControls { get { return null; } }
+        public IDictionary<string, Action> ContextMenuControls => null;
 
         public WorldRecordComponent(LiveSplitState state)
         {
             State = state;
 
-            Client = new SpeedrunComClient(userAgent: "LiveSplit/" + Updates.UpdateHelper.Version, maxCacheElements: 0);
+            Client = new SpeedrunComClient(userAgent: Updates.UpdateHelper.UserAgent, maxCacheElements: 0);
 
             RefreshInterval = TimeSpan.FromMinutes(5);
             Cache = new GraphicsCache();
@@ -336,9 +333,6 @@ namespace LiveSplit.WorldRecord.UI.Components
             Settings.SetSettings(settings);
         }
 
-        public int GetSettingsHashCode()
-        {
-            return Settings.GetSettingsHashCode();
-        }
+        public int GetSettingsHashCode() => Settings.GetSettingsHashCode();
     }
 }
