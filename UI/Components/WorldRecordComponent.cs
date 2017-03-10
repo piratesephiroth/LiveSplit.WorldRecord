@@ -137,7 +137,7 @@ namespace LiveSplit.WorldRecord.UI.Components
                 var tieCount = AllTies.Count;
 
                 var finalTime = GetPBTime(timingMethod);
-                if (finalTime < time)
+                if (IsPBTimeLower(finalTime, time, game != null ? game.Ruleset.ShowMilliseconds : false))
                 {
                     formatted = LocalTimeFormatter.Format(finalTime);
                     runners = State.Run.Metadata.Category.Players.Value > 1 ? "us" : "me";
@@ -200,6 +200,15 @@ namespace LiveSplit.WorldRecord.UI.Components
                     InternalComponent.InformationValue = "-";
                 }
             }
+        }
+
+        private bool IsPBTimeLower(TimeSpan? pbTime, TimeSpan? recordTime, bool showMillis)
+        {
+            if (pbTime == null || recordTime == null)
+                return false;
+            if (showMillis)
+                return (int)pbTime.Value.TotalMilliseconds <= (int)recordTime.Value.TotalMilliseconds;
+            return (int)pbTime.Value.TotalSeconds <= (int)recordTime.Value.TotalSeconds;
         }
 
         private TimeSpan? GetPBTime(Model.TimingMethod method)
