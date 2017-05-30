@@ -22,6 +22,6 @@ namespace LiveSplit.WorldRecord.UI.Components
 
         public string UpdateURL => "http://livesplit.org/update/";
 
-        public Version Version => Version.Parse("1.6.3");
+        public Version Version => Version.Parse("1.7.0");
     }
 }
