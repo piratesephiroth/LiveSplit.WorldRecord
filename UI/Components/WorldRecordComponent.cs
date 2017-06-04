@@ -58,7 +58,7 @@ namespace LiveSplit.WorldRecord.UI.Components
             Cache = new GraphicsCache();
             TimeFormatter = new AutomaticPrecisionTimeFormatter();
             LocalTimeFormatter = new RegularTimeFormatter();
-            InternalComponent = new InfoTextComponent("World Record", "-");
+            InternalComponent = new InfoTextComponent("World Record", TimeFormatConstants.DASH);
             Settings = new WorldRecordSettings()
             {
                 CurrentState = state
@@ -197,7 +197,7 @@ namespace LiveSplit.WorldRecord.UI.Components
                 }
                 else
                 {
-                    InternalComponent.InformationValue = "-";
+                    InternalComponent.InformationValue = TimeFormatConstants.DASH;
                 }
             }
         }
