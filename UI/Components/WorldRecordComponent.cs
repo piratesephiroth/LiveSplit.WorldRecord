@@ -110,11 +110,12 @@ namespace LiveSplit.WorldRecord.UI.Components
             }
 
             IsLoading = false;
-            ShowWorldRecord();
+            ShowWorldRecord(State.Layout.Mode);
         }
 
-        private void ShowWorldRecord()
+        private void ShowWorldRecord(LayoutMode mode)
         {
+            var centeredText = Settings.CenteredText && !Settings.Display2Rows && mode == LayoutMode.Vertical;
             if (WorldRecord != null)
             {
                 var time = WorldRecord.Times.Primary;
@@ -144,7 +145,7 @@ namespace LiveSplit.WorldRecord.UI.Components
                     tieCount = 1;
                 }
 
-                if (Settings.CenteredText && !Settings.Display2Rows)
+                if (centeredText)
                 {
                     var textList = new List<string>();
 
@@ -178,7 +179,7 @@ namespace LiveSplit.WorldRecord.UI.Components
             }
             else if (IsLoading)
             {
-                if (Settings.CenteredText && !Settings.Display2Rows)
+                if (centeredText)
                 {
                     InternalComponent.InformationName = "Loading World Record...";
                     InternalComponent.AlternateNameText = new[] { "Loading WR..." };
@@ -190,7 +191,7 @@ namespace LiveSplit.WorldRecord.UI.Components
             }
             else
             {
-                if (Settings.CenteredText && !Settings.Display2Rows)
+                if (centeredText)
                 {
                     InternalComponent.InformationName = "Unknown World Record";
                     InternalComponent.AlternateNameText = new[] { "Unknown WR" };
@@ -236,7 +237,7 @@ namespace LiveSplit.WorldRecord.UI.Components
             {
                 IsLoading = true;
                 WorldRecord = null;
-                ShowWorldRecord();
+                ShowWorldRecord(mode);
                 Task.Factory.StartNew(RefreshWorldRecord);
             }
             else if (LastUpdate != null && TimeStamp.Now - LastUpdate >= RefreshInterval)
@@ -245,13 +246,13 @@ namespace LiveSplit.WorldRecord.UI.Components
             }
             else
             {
-                Cache["CenteredText"] = Settings.CenteredText && !Settings.Display2Rows;
+                Cache["CenteredText"] = Settings.CenteredText && !Settings.Display2Rows && mode == LayoutMode.Vertical;
                 Cache["RealPBTime"] = GetPBTime(Model.TimingMethod.RealTime);
                 Cache["GamePBTime"] = GetPBTime(Model.TimingMethod.GameTime);
 
                 if (Cache.HasChanged)
                 {
-                    ShowWorldRecord();
+                    ShowWorldRecord(mode);
                 }
             }
 
@@ -285,7 +286,7 @@ namespace LiveSplit.WorldRecord.UI.Components
                 = InternalComponent.ValueLabel.HasShadow
                 = state.LayoutSettings.DropShadows;
 
-            if (Settings.CenteredText && !Settings.Display2Rows)
+            if (Settings.CenteredText && !Settings.Display2Rows && mode == LayoutMode.Vertical)
             {
                 InternalComponent.NameLabel.HorizontalAlignment = StringAlignment.Center;
                 InternalComponent.ValueLabel.HorizontalAlignment = StringAlignment.Center;
