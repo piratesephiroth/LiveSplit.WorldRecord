@@ -47,9 +47,10 @@
             this.chkCenteredText = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-            this.chkRegion = new System.Windows.Forms.CheckBox();
-            this.chkPlatform = new System.Windows.Forms.CheckBox();
             this.chkVariables = new System.Windows.Forms.CheckBox();
+            this.chkPlatform = new System.Windows.Forms.CheckBox();
+            this.chkRegion = new System.Windows.Forms.CheckBox();
+            this.chkSubcategories = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -308,20 +309,46 @@
             // 
             // tableLayoutPanel4
             // 
-            this.tableLayoutPanel4.ColumnCount = 3;
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
+            this.tableLayoutPanel4.ColumnCount = 4;
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel4.Controls.Add(this.chkVariables, 2, 0);
             this.tableLayoutPanel4.Controls.Add(this.chkPlatform, 1, 0);
             this.tableLayoutPanel4.Controls.Add(this.chkRegion, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.chkSubcategories, 3, 0);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel4.Size = new System.Drawing.Size(450, 30);
             this.tableLayoutPanel4.TabIndex = 0;
+            // 
+            // chkVariables
+            // 
+            this.chkVariables.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkVariables.AutoSize = true;
+            this.chkVariables.Location = new System.Drawing.Point(231, 6);
+            this.chkVariables.Margin = new System.Windows.Forms.Padding(7, 3, 3, 3);
+            this.chkVariables.Name = "chkVariables";
+            this.chkVariables.Size = new System.Drawing.Size(102, 17);
+            this.chkVariables.TabIndex = 2;
+            this.chkVariables.Text = "Variables";
+            this.chkVariables.UseVisualStyleBackColor = true;
+            // 
+            // chkPlatform
+            // 
+            this.chkPlatform.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkPlatform.AutoSize = true;
+            this.chkPlatform.Location = new System.Drawing.Point(119, 6);
+            this.chkPlatform.Margin = new System.Windows.Forms.Padding(7, 3, 3, 3);
+            this.chkPlatform.Name = "chkPlatform";
+            this.chkPlatform.Size = new System.Drawing.Size(102, 17);
+            this.chkPlatform.TabIndex = 1;
+            this.chkPlatform.Text = "Platform";
+            this.chkPlatform.UseVisualStyleBackColor = true;
             // 
             // chkRegion
             // 
@@ -330,34 +357,22 @@
             this.chkRegion.Location = new System.Drawing.Point(7, 6);
             this.chkRegion.Margin = new System.Windows.Forms.Padding(7, 3, 3, 3);
             this.chkRegion.Name = "chkRegion";
-            this.chkRegion.Size = new System.Drawing.Size(139, 17);
+            this.chkRegion.Size = new System.Drawing.Size(102, 17);
             this.chkRegion.TabIndex = 0;
             this.chkRegion.Text = "Region";
             this.chkRegion.UseVisualStyleBackColor = true;
             // 
-            // chkPlatform
+            // chkSubcategories
             // 
-            this.chkPlatform.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkPlatform.AutoSize = true;
-            this.chkPlatform.Location = new System.Drawing.Point(156, 6);
-            this.chkPlatform.Margin = new System.Windows.Forms.Padding(7, 3, 3, 3);
-            this.chkPlatform.Name = "chkPlatform";
-            this.chkPlatform.Size = new System.Drawing.Size(140, 17);
-            this.chkPlatform.TabIndex = 1;
-            this.chkPlatform.Text = "Platform";
-            this.chkPlatform.UseVisualStyleBackColor = true;
-            // 
-            // chkVariables
-            // 
-            this.chkVariables.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkVariables.AutoSize = true;
-            this.chkVariables.Location = new System.Drawing.Point(306, 6);
-            this.chkVariables.Margin = new System.Windows.Forms.Padding(7, 3, 3, 3);
-            this.chkVariables.Name = "chkVariables";
-            this.chkVariables.Size = new System.Drawing.Size(141, 17);
-            this.chkVariables.TabIndex = 2;
-            this.chkVariables.Text = "Variables";
-            this.chkVariables.UseVisualStyleBackColor = true;
+            this.chkSubcategories.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkSubcategories.AutoSize = true;
+            this.chkSubcategories.Location = new System.Drawing.Point(343, 6);
+            this.chkSubcategories.Margin = new System.Windows.Forms.Padding(7, 3, 3, 3);
+            this.chkSubcategories.Name = "chkSubcategories";
+            this.chkSubcategories.Size = new System.Drawing.Size(104, 17);
+            this.chkSubcategories.TabIndex = 3;
+            this.chkSubcategories.Text = "Subcategories";
+            this.chkSubcategories.UseVisualStyleBackColor = true;
             // 
             // WorldRecordSettings
             // 
@@ -407,5 +422,6 @@
         private System.Windows.Forms.CheckBox chkVariables;
         private System.Windows.Forms.CheckBox chkPlatform;
         private System.Windows.Forms.CheckBox chkRegion;
+        private System.Windows.Forms.CheckBox chkSubcategories;
     }
 }

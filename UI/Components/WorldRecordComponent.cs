@@ -80,7 +80,20 @@ namespace LiveSplit.WorldRecord.UI.Components
                 if (State != null && State.Run != null
                     && State.Run.Metadata.Game != null && State.Run.Metadata.Category != null)
                 {
-                    var variableFilter = Settings.FilterVariables ? State.Run.Metadata.VariableValues.Values : null;
+                    IEnumerable<VariableValue> variableFilter = null;
+                    if (Settings.FilterVariables || Settings.FilterSubcategories)
+                    {
+                        variableFilter = State.Run.Metadata.VariableValues.Values.Where(value => {
+                            if (value == null)
+                                return false;
+
+                            if (value.Variable.IsSubcategory)
+                                return Settings.FilterSubcategories;
+
+                            return Settings.FilterVariables;
+                        });
+                    }
+
                     var regionFilter = Settings.FilterRegion && State.Run.Metadata.Region != null ? State.Run.Metadata.Region.ID : null;
                     var platformFilter = Settings.FilterPlatform && State.Run.Metadata.Platform != null ? State.Run.Metadata.Platform.ID : null;
                     EmulatorsFilter emulatorFilter = EmulatorsFilter.NotSet;
@@ -231,7 +244,7 @@ namespace LiveSplit.WorldRecord.UI.Components
             Cache["PlatformID"] = Settings.FilterPlatform ? state.Run.Metadata.PlatformName : null;
             Cache["RegionID"] = Settings.FilterRegion ? state.Run.Metadata.RegionName : null;
             Cache["UsesEmulator"] = Settings.FilterPlatform ? (bool?)state.Run.Metadata.UsesEmulator : null;
-            Cache["Variables"] = Settings.FilterVariables ? string.Join(",", state.Run.Metadata.VariableValueNames.Values) : null;
+            Cache["Variables"] = (Settings.FilterVariables || Settings.FilterSubcategories) ? string.Join(",", state.Run.Metadata.VariableValueNames.Values) : null;
 
             if (Cache.HasChanged)
             {
