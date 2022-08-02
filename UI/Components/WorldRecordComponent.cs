@@ -245,6 +245,8 @@ namespace LiveSplit.WorldRecord.UI.Components
             Cache["RegionID"] = Settings.FilterRegion ? state.Run.Metadata.RegionName : null;
             Cache["UsesEmulator"] = Settings.FilterPlatform ? (bool?)state.Run.Metadata.UsesEmulator : null;
             Cache["Variables"] = (Settings.FilterVariables || Settings.FilterSubcategories) ? string.Join(",", state.Run.Metadata.VariableValueNames.Values) : null;
+            Cache["FilterVariables"] = Settings.FilterVariables;
+            Cache["FilterSubcategories"] = Settings.FilterSubcategories;
 
             if (Cache.HasChanged)
             {
