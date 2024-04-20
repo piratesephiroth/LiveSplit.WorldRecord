@@ -104,11 +104,12 @@ namespace LiveSplit.WorldRecord.UI.Components
                         else
                             emulatorFilter = EmulatorsFilter.NoEmulators;
                     }
+                    var timingMethodFilter = GetTimingMethodOverride();
 
                     var leaderboard = Client.Leaderboards.GetLeaderboardForFullGameCategory(State.Run.Metadata.Game.ID, State.Run.Metadata.Category.ID, 
                         top: 1,
                         platformId: platformFilter, regionId: regionFilter, 
-                        emulatorsFilter: emulatorFilter, variableFilters: variableFilter);
+                        emulatorsFilter: emulatorFilter, variableFilters: variableFilter, orderBy: timingMethodFilter);
 
                     if (leaderboard != null)
                     {
@@ -131,12 +132,17 @@ namespace LiveSplit.WorldRecord.UI.Components
             var centeredText = Settings.CenteredText && !Settings.Display2Rows && mode == LayoutMode.Vertical;
             if (WorldRecord != null)
             {
-                var time = WorldRecord.Times.Primary;
+                var timingMethodOverride = GetTimingMethodOverride();
+                var time = GetWorldRecordTime(timingMethodOverride);
                 var timingMethod = State.CurrentTimingMethod;
                 var game = State.Run.Metadata.Game;
                 if (game != null)
                 {
-                    timingMethod = game.Ruleset.DefaultTimingMethod.ToLiveSplitTimingMethod();
+                    if (timingMethodOverride != null)
+                        timingMethod = timingMethodOverride.Value.ToLiveSplitTimingMethod();
+                    else
+                        timingMethod = game.Ruleset.DefaultTimingMethod.ToLiveSplitTimingMethod();
+
                     LocalTimeFormatter.Accuracy = game.Ruleset.ShowMilliseconds ? TimeAccuracy.Hundredths : TimeAccuracy.Seconds;
                 }
 
@@ -236,6 +242,28 @@ namespace LiveSplit.WorldRecord.UI.Components
             return pbTime;
         }
 
+        private TimeSpan? GetWorldRecordTime(SpeedrunComSharp.TimingMethod? timingMethodOverride)
+        {
+            if (timingMethodOverride == SpeedrunComSharp.TimingMethod.RealTime)
+                return WorldRecord.Times.RealTime;
+            if (timingMethodOverride == SpeedrunComSharp.TimingMethod.RealTimeWithoutLoads)
+                return WorldRecord.Times.RealTimeWithoutLoads;
+            if (timingMethodOverride == SpeedrunComSharp.TimingMethod.GameTime)
+                return WorldRecord.Times.GameTime;
+            return WorldRecord.Times.Primary;
+        }
+
+        private SpeedrunComSharp.TimingMethod? GetTimingMethodOverride()
+        {
+            if (Settings.TimingMethod == "Real Time")
+                return SpeedrunComSharp.TimingMethod.RealTime;
+            if (Settings.TimingMethod == "Real Time Without Loads")
+                return SpeedrunComSharp.TimingMethod.RealTimeWithoutLoads;
+            if (Settings.TimingMethod == "Game Time")
+                return SpeedrunComSharp.TimingMethod.GameTime;
+            return null;
+        }
+
         public void Update(IInvalidator invalidator, LiveSplitState state, float width, float height, LayoutMode mode)
         {
             Cache.Restart();
@@ -247,6 +275,7 @@ namespace LiveSplit.WorldRecord.UI.Components
             Cache["Variables"] = (Settings.FilterVariables || Settings.FilterSubcategories) ? string.Join(",", state.Run.Metadata.VariableValueNames.Values) : null;
             Cache["FilterVariables"] = Settings.FilterVariables;
             Cache["FilterSubcategories"] = Settings.FilterSubcategories;
+            Cache["TimingMethod"] = Settings.TimingMethod;
 
             if (Cache.HasChanged)
             {

@@ -47,10 +47,12 @@
             this.chkCenteredText = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.label3 = new System.Windows.Forms.Label();
             this.chkVariables = new System.Windows.Forms.CheckBox();
             this.chkPlatform = new System.Windows.Forms.CheckBox();
             this.chkRegion = new System.Windows.Forms.CheckBox();
             this.chkSubcategories = new System.Windows.Forms.CheckBox();
+            this.cmbTimingMethod = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -85,7 +87,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(462, 280);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(462, 309);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // groupBox1
@@ -188,7 +190,7 @@
             // 
             this.btnTimeColor.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btnTimeColor.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnTimeColor.Location = new System.Drawing.Point(156, 32);
+            this.btnTimeColor.Location = new System.Drawing.Point(157, 32);
             this.btnTimeColor.Name = "btnTimeColor";
             this.btnTimeColor.Size = new System.Drawing.Size(23, 23);
             this.btnTimeColor.TabIndex = 1;
@@ -201,7 +203,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(3, 37);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(147, 13);
+            this.label2.Size = new System.Drawing.Size(148, 13);
             this.label2.TabIndex = 5;
             this.label2.Text = "Color:";
             // 
@@ -212,7 +214,7 @@
             this.chkOverrideTimeColor.Location = new System.Drawing.Point(7, 6);
             this.chkOverrideTimeColor.Margin = new System.Windows.Forms.Padding(7, 3, 3, 3);
             this.chkOverrideTimeColor.Name = "chkOverrideTimeColor";
-            this.chkOverrideTimeColor.Size = new System.Drawing.Size(143, 17);
+            this.chkOverrideTimeColor.Size = new System.Drawing.Size(144, 17);
             this.chkOverrideTimeColor.TabIndex = 0;
             this.chkOverrideTimeColor.Text = "Override Layout Settings";
             this.chkOverrideTimeColor.UseVisualStyleBackColor = true;
@@ -302,7 +304,7 @@
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox3.Location = new System.Drawing.Point(3, 228);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(456, 49);
+            this.groupBox3.Size = new System.Drawing.Size(456, 78);
             this.groupBox3.TabIndex = 33;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Filter Leaderboard By";
@@ -314,6 +316,8 @@
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel4.Controls.Add(this.cmbTimingMethod, 1, 1);
+            this.tableLayoutPanel4.Controls.Add(this.label3, 0, 1);
             this.tableLayoutPanel4.Controls.Add(this.chkVariables, 2, 0);
             this.tableLayoutPanel4.Controls.Add(this.chkPlatform, 1, 0);
             this.tableLayoutPanel4.Controls.Add(this.chkRegion, 0, 0);
@@ -321,10 +325,22 @@
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-            this.tableLayoutPanel4.RowCount = 1;
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(450, 30);
+            this.tableLayoutPanel4.RowCount = 3;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(450, 59);
             this.tableLayoutPanel4.TabIndex = 0;
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(3, 37);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(106, 13);
+            this.label3.TabIndex = 42;
+            this.label3.Text = "Timing Method:";
             // 
             // chkVariables
             // 
@@ -374,6 +390,23 @@
             this.chkSubcategories.Text = "Subcategories";
             this.chkSubcategories.UseVisualStyleBackColor = true;
             // 
+            // cmbTimingMethod
+            // 
+            this.cmbTimingMethod.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel4.SetColumnSpan(this.cmbTimingMethod, 3);
+            this.cmbTimingMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTimingMethod.FormattingEnabled = true;
+            this.cmbTimingMethod.Items.AddRange(new object[] {
+            "Default for Leaderboard",
+            "Real Time",
+            "Real Time Without Loads",
+            "Game Time"});
+            this.cmbTimingMethod.Location = new System.Drawing.Point(115, 33);
+            this.cmbTimingMethod.Name = "cmbTimingMethod";
+            this.cmbTimingMethod.Size = new System.Drawing.Size(332, 21);
+            this.cmbTimingMethod.TabIndex = 43;
+            this.cmbTimingMethod.SelectedIndexChanged += new System.EventHandler(this.cmbTimingMethod_SelectedIndexChanged);
+            // 
             // WorldRecordSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -381,7 +414,7 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "WorldRecordSettings";
             this.Padding = new System.Windows.Forms.Padding(7);
-            this.Size = new System.Drawing.Size(476, 294);
+            this.Size = new System.Drawing.Size(476, 323);
             this.Load += new System.EventHandler(this.WorldRecordSettings_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
@@ -423,5 +456,7 @@
         private System.Windows.Forms.CheckBox chkPlatform;
         private System.Windows.Forms.CheckBox chkRegion;
         private System.Windows.Forms.CheckBox chkSubcategories;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox cmbTimingMethod;
     }
 }

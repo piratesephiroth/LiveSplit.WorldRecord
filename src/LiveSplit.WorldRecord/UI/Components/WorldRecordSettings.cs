@@ -31,6 +31,8 @@ namespace LiveSplit.UI.Components
         public bool FilterRegion { get; set; }
         public bool FilterSubcategories { get; set; }
 
+        public string TimingMethod { get; set; }
+
         public LayoutMode Mode { get; set; }
 
         public WorldRecordSettings()
@@ -50,6 +52,7 @@ namespace LiveSplit.UI.Components
             FilterPlatform = false;
             FilterRegion = false;
             FilterSubcategories = true;
+            TimingMethod = "Default for Leaderboard";
 
             chkOverrideTextColor.DataBindings.Add("Checked", this, "OverrideTextColor", false, DataSourceUpdateMode.OnPropertyChanged);
             btnTextColor.DataBindings.Add("BackColor", this, "TextColor", false, DataSourceUpdateMode.OnPropertyChanged);
@@ -62,6 +65,7 @@ namespace LiveSplit.UI.Components
             chkPlatform.DataBindings.Add("Checked", this, "FilterPlatform", false, DataSourceUpdateMode.OnPropertyChanged);
             chkVariables.DataBindings.Add("Checked", this, "FilterVariables", false, DataSourceUpdateMode.OnPropertyChanged);
             chkSubcategories.DataBindings.Add("Checked", this, "FilterSubcategories", false, DataSourceUpdateMode.OnPropertyChanged);
+            cmbTimingMethod.DataBindings.Add("SelectedItem", this, "TimingMethod", false, DataSourceUpdateMode.OnPropertyChanged);
         }
 
         void chkOverrideTimeColor_CheckedChanged(object sender, EventArgs e)
@@ -117,6 +121,7 @@ namespace LiveSplit.UI.Components
             FilterPlatform = SettingsHelper.ParseBool(element["FilterPlatform"]);
             FilterVariables = SettingsHelper.ParseBool(element["FilterVariables"]);
             FilterSubcategories = SettingsHelper.ParseBool(element["FilterSubcategories"], true);
+            TimingMethod = SettingsHelper.ParseString(element["TimingMethod"], "Default for Leaderboard");
         }
 
         public XmlNode GetSettings(XmlDocument document)
@@ -146,7 +151,8 @@ namespace LiveSplit.UI.Components
             SettingsHelper.CreateSetting(document, parent, "FilterRegion", FilterRegion) ^
             SettingsHelper.CreateSetting(document, parent, "FilterPlatform", FilterPlatform) ^
             SettingsHelper.CreateSetting(document, parent, "FilterVariables", FilterVariables) ^
-            SettingsHelper.CreateSetting(document, parent, "FilterSubcategories", FilterSubcategories);
+            SettingsHelper.CreateSetting(document, parent, "FilterSubcategories", FilterSubcategories) ^
+            SettingsHelper.CreateSetting(document, parent, "TimingMethod", TimingMethod);
         }
 
         private void ColorButtonClick(object sender, EventArgs e)
@@ -168,6 +174,11 @@ namespace LiveSplit.UI.Components
                 chkCenteredText.DataBindings.Clear();
                 chkCenteredText.DataBindings.Add("Checked", this, "CenteredText", false, DataSourceUpdateMode.OnPropertyChanged);
             }
+        }
+
+        private void cmbTimingMethod_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            TimingMethod = cmbTimingMethod.SelectedItem.ToString();
         }
     }
 }
