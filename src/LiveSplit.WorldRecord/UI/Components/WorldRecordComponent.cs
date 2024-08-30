@@ -56,7 +56,12 @@ namespace LiveSplit.WorldRecord.UI.Components
 
             RefreshInterval = TimeSpan.FromMinutes(5);
             Cache = new GraphicsCache();
-            TimeFormatter = new AutomaticPrecisionTimeFormatter();
+            TimeFormatter = new GeneralTimeFormatter()
+            {
+                NullFormat = NullFormat.ZeroWithAccuracy,
+                DigitsFormat = DigitsFormat.SingleDigitMinutes,
+                Accuracy = TimeAccuracy.Milliseconds,
+            };
             LocalTimeFormatter = new RegularTimeFormatter();
             InternalComponent = new InfoTextComponent("World Record", TimeFormatConstants.DASH);
             Settings = new WorldRecordSettings()
@@ -143,7 +148,7 @@ namespace LiveSplit.WorldRecord.UI.Components
                     else
                         timingMethod = game.Ruleset.DefaultTimingMethod.ToLiveSplitTimingMethod();
 
-                    LocalTimeFormatter.Accuracy = game.Ruleset.ShowMilliseconds ? TimeAccuracy.Hundredths : TimeAccuracy.Seconds;
+                    LocalTimeFormatter.Accuracy = game.Ruleset.ShowMilliseconds ? TimeAccuracy.Milliseconds : TimeAccuracy.Seconds;
                 }
 
                 var formatted = TimeFormatter.Format(time);
