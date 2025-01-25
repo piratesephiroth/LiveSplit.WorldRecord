@@ -63,6 +63,7 @@ public class WorldRecordComponent : IComponent
             NullFormat = NullFormat.ZeroWithAccuracy,
             DigitsFormat = DigitsFormat.SingleDigitMinutes,
             Accuracy = TimeAccuracy.Milliseconds,
+            AutomaticPrecision = true,
         };
         LocalTimeFormatter = new RegularTimeFormatter();
         InternalComponent = new InfoTextComponent("World Record", TimeFormatConstants.DASH);
