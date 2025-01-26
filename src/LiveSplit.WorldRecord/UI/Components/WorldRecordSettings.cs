@@ -33,6 +33,7 @@ public partial class WorldRecordSettings : UserControl
     public bool FilterSubcategories { get; set; }
 
     public string TimingMethod { get; set; }
+    public WorldRecordPrecisionType WRPrecision { get; set; }
 
     public LayoutMode Mode { get; set; }
 
@@ -54,6 +55,7 @@ public partial class WorldRecordSettings : UserControl
         FilterRegion = false;
         FilterSubcategories = true;
         TimingMethod = "Default for Leaderboard";
+        WRPrecision = WorldRecordPrecisionType.FromLeaderboard;
 
         chkOverrideTextColor.DataBindings.Add("Checked", this, "OverrideTextColor", false, DataSourceUpdateMode.OnPropertyChanged);
         btnTextColor.DataBindings.Add("BackColor", this, "TextColor", false, DataSourceUpdateMode.OnPropertyChanged);
@@ -97,6 +99,10 @@ public partial class WorldRecordSettings : UserControl
         }
 
         chkTwoRows_CheckedChanged(null, null);
+
+        rdoPrecByLeaderboard.Checked = WRPrecision == WorldRecordPrecisionType.FromLeaderboard;
+        rdoPrecSeconds.Checked = WRPrecision ==  WorldRecordPrecisionType.Seconds;
+        rdoPrecMillis.Checked = WRPrecision == WorldRecordPrecisionType.Milliseconds;
     }
 
     private void cmbGradientType_SelectedIndexChanged(object sender, EventArgs e)
@@ -124,6 +130,7 @@ public partial class WorldRecordSettings : UserControl
         FilterVariables = SettingsHelper.ParseBool(element["FilterVariables"]);
         FilterSubcategories = SettingsHelper.ParseBool(element["FilterSubcategories"], true);
         TimingMethod = SettingsHelper.ParseString(element["TimingMethod"], "Default for Leaderboard");
+        WRPrecision = SettingsHelper.ParseEnum(element["PrecisionType"], WorldRecordPrecisionType.FromLeaderboard);
     }
 
     public XmlNode GetSettings(XmlDocument document)
@@ -154,7 +161,8 @@ public partial class WorldRecordSettings : UserControl
         SettingsHelper.CreateSetting(document, parent, "FilterPlatform", FilterPlatform) ^
         SettingsHelper.CreateSetting(document, parent, "FilterVariables", FilterVariables) ^
         SettingsHelper.CreateSetting(document, parent, "FilterSubcategories", FilterSubcategories) ^
-        SettingsHelper.CreateSetting(document, parent, "TimingMethod", TimingMethod);
+        SettingsHelper.CreateSetting(document, parent, "TimingMethod", TimingMethod) ^
+        SettingsHelper.CreateSetting(document, parent, "PrecisionType", WRPrecision);
     }
 
     private void ColorButtonClick(object sender, EventArgs e)
@@ -181,5 +189,21 @@ public partial class WorldRecordSettings : UserControl
     private void cmbTimingMethod_SelectedIndexChanged(object sender, EventArgs e)
     {
         TimingMethod = cmbTimingMethod.SelectedItem.ToString();
+    }
+
+    private void rdoPrecision_CheckedChanged(object sender, EventArgs e)
+    {
+        if (rdoPrecByLeaderboard.Checked)
+        {
+            WRPrecision = WorldRecordPrecisionType.FromLeaderboard;
+        }
+        else if (rdoPrecSeconds.Checked)
+        {
+            WRPrecision = WorldRecordPrecisionType.Seconds;
+        }
+        else if (rdoPrecMillis.Checked)
+        {
+            WRPrecision = WorldRecordPrecisionType.Milliseconds;
+        }
     }
 }

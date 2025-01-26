@@ -29,6 +29,11 @@
         private void InitializeComponent()
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.rdoPrecMillis = new System.Windows.Forms.RadioButton();
+            this.rdoPrecSeconds = new System.Windows.Forms.RadioButton();
+            this.rdoPrecByLeaderboard = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.btnTextColor = new System.Windows.Forms.Button();
@@ -47,13 +52,15 @@
             this.chkCenteredText = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.cmbTimingMethod = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.chkVariables = new System.Windows.Forms.CheckBox();
             this.chkPlatform = new System.Windows.Forms.CheckBox();
             this.chkRegion = new System.Windows.Forms.CheckBox();
             this.chkSubcategories = new System.Windows.Forms.CheckBox();
-            this.cmbTimingMethod = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel1.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            this.tableLayoutPanel5.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -69,6 +76,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.groupBox4, 0, 5);
             this.tableLayoutPanel1.Controls.Add(this.groupBox1, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.groupBox2, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.cmbGradientType, 3, 0);
@@ -81,14 +89,86 @@
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(7, 7);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 5;
+            this.tableLayoutPanel1.RowCount = 6;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(462, 309);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(462, 364);
             this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.groupBox4, 4);
+            this.groupBox4.Controls.Add(this.tableLayoutPanel5);
+            this.groupBox4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox4.Location = new System.Drawing.Point(3, 312);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(456, 49);
+            this.groupBox4.TabIndex = 34;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Precision";
+            // 
+            // tableLayoutPanel5
+            // 
+            this.tableLayoutPanel5.ColumnCount = 3;
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel5.Controls.Add(this.rdoPrecMillis, 2, 0);
+            this.tableLayoutPanel5.Controls.Add(this.rdoPrecSeconds, 1, 0);
+            this.tableLayoutPanel5.Controls.Add(this.rdoPrecByLeaderboard, 0, 0);
+            this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 16);
+            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+            this.tableLayoutPanel5.RowCount = 2;
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(450, 30);
+            this.tableLayoutPanel5.TabIndex = 0;
+            // 
+            // rdoPrecMillis
+            // 
+            this.rdoPrecMillis.AutoSize = true;
+            this.rdoPrecMillis.Location = new System.Drawing.Point(307, 6);
+            this.rdoPrecMillis.Margin = new System.Windows.Forms.Padding(7, 6, 3, 3);
+            this.rdoPrecMillis.Name = "rdoPrecMillis";
+            this.rdoPrecMillis.Size = new System.Drawing.Size(82, 17);
+            this.rdoPrecMillis.TabIndex = 2;
+            this.rdoPrecMillis.TabStop = true;
+            this.rdoPrecMillis.Text = "Milliseconds";
+            this.rdoPrecMillis.UseVisualStyleBackColor = true;
+            this.rdoPrecMillis.CheckedChanged += new System.EventHandler(this.rdoPrecision_CheckedChanged);
+            // 
+            // rdoPrecSeconds
+            // 
+            this.rdoPrecSeconds.AutoSize = true;
+            this.rdoPrecSeconds.Location = new System.Drawing.Point(157, 6);
+            this.rdoPrecSeconds.Margin = new System.Windows.Forms.Padding(7, 6, 3, 3);
+            this.rdoPrecSeconds.Name = "rdoPrecSeconds";
+            this.rdoPrecSeconds.Size = new System.Drawing.Size(67, 17);
+            this.rdoPrecSeconds.TabIndex = 1;
+            this.rdoPrecSeconds.TabStop = true;
+            this.rdoPrecSeconds.Text = "Seconds";
+            this.rdoPrecSeconds.UseVisualStyleBackColor = true;
+            this.rdoPrecSeconds.CheckedChanged += new System.EventHandler(this.rdoPrecision_CheckedChanged);
+            // 
+            // rdoPrecByLeaderboard
+            // 
+            this.rdoPrecByLeaderboard.AutoSize = true;
+            this.rdoPrecByLeaderboard.Location = new System.Drawing.Point(7, 6);
+            this.rdoPrecByLeaderboard.Margin = new System.Windows.Forms.Padding(7, 6, 3, 3);
+            this.rdoPrecByLeaderboard.Name = "rdoPrecByLeaderboard";
+            this.rdoPrecByLeaderboard.Size = new System.Drawing.Size(111, 17);
+            this.rdoPrecByLeaderboard.TabIndex = 0;
+            this.rdoPrecByLeaderboard.TabStop = true;
+            this.rdoPrecByLeaderboard.Text = "From Leaderboard";
+            this.rdoPrecByLeaderboard.UseVisualStyleBackColor = true;
+            this.rdoPrecByLeaderboard.CheckedChanged += new System.EventHandler(this.rdoPrecision_CheckedChanged);
             // 
             // groupBox1
             // 
@@ -298,7 +378,6 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.AutoSize = true;
             this.tableLayoutPanel1.SetColumnSpan(this.groupBox3, 4);
             this.groupBox3.Controls.Add(this.tableLayoutPanel4);
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -331,6 +410,23 @@
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel4.Size = new System.Drawing.Size(450, 59);
             this.tableLayoutPanel4.TabIndex = 0;
+            // 
+            // cmbTimingMethod
+            // 
+            this.cmbTimingMethod.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel4.SetColumnSpan(this.cmbTimingMethod, 3);
+            this.cmbTimingMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTimingMethod.FormattingEnabled = true;
+            this.cmbTimingMethod.Items.AddRange(new object[] {
+            "Default for Leaderboard",
+            "Real Time",
+            "Real Time Without Loads",
+            "Game Time"});
+            this.cmbTimingMethod.Location = new System.Drawing.Point(115, 33);
+            this.cmbTimingMethod.Name = "cmbTimingMethod";
+            this.cmbTimingMethod.Size = new System.Drawing.Size(332, 21);
+            this.cmbTimingMethod.TabIndex = 43;
+            this.cmbTimingMethod.SelectedIndexChanged += new System.EventHandler(this.cmbTimingMethod_SelectedIndexChanged);
             // 
             // label3
             // 
@@ -390,23 +486,6 @@
             this.chkSubcategories.Text = "Subcategories";
             this.chkSubcategories.UseVisualStyleBackColor = true;
             // 
-            // cmbTimingMethod
-            // 
-            this.cmbTimingMethod.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel4.SetColumnSpan(this.cmbTimingMethod, 3);
-            this.cmbTimingMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbTimingMethod.FormattingEnabled = true;
-            this.cmbTimingMethod.Items.AddRange(new object[] {
-            "Default for Leaderboard",
-            "Real Time",
-            "Real Time Without Loads",
-            "Game Time"});
-            this.cmbTimingMethod.Location = new System.Drawing.Point(115, 33);
-            this.cmbTimingMethod.Name = "cmbTimingMethod";
-            this.cmbTimingMethod.Size = new System.Drawing.Size(332, 21);
-            this.cmbTimingMethod.TabIndex = 43;
-            this.cmbTimingMethod.SelectedIndexChanged += new System.EventHandler(this.cmbTimingMethod_SelectedIndexChanged);
-            // 
             // WorldRecordSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -414,10 +493,13 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "WorldRecordSettings";
             this.Padding = new System.Windows.Forms.Padding(7);
-            this.Size = new System.Drawing.Size(476, 323);
+            this.Size = new System.Drawing.Size(476, 378);
             this.Load += new System.EventHandler(this.WorldRecordSettings_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.tableLayoutPanel5.ResumeLayout(false);
+            this.tableLayoutPanel5.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
@@ -458,5 +540,10 @@
         private System.Windows.Forms.CheckBox chkSubcategories;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cmbTimingMethod;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+        private System.Windows.Forms.RadioButton rdoPrecByLeaderboard;
+        private System.Windows.Forms.RadioButton rdoPrecMillis;
+        private System.Windows.Forms.RadioButton rdoPrecSeconds;
     }
 }

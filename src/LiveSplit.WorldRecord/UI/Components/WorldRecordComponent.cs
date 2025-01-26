@@ -26,8 +26,8 @@ public class WorldRecordComponent : IComponent
     protected WorldRecordSettings Settings { get; set; }
 
     private GraphicsCache Cache { get; set; }
-    private ITimeFormatter TimeFormatter { get; set; }
-    private RegularTimeFormatter LocalTimeFormatter { get; set; }
+    private GeneralTimeFormatter WRTimeFormatter { get; set; }
+    private GeneralTimeFormatter PBTimeFormatter { get; set; }
     private LiveSplitState State { get; set; }
     private TimeStamp LastUpdate { get; set; }
     private TimeSpan RefreshInterval { get; set; }
@@ -58,14 +58,11 @@ public class WorldRecordComponent : IComponent
 
         RefreshInterval = TimeSpan.FromMinutes(5);
         Cache = new GraphicsCache();
-        TimeFormatter = new GeneralTimeFormatter()
+        WRTimeFormatter = new AutomaticPrecisionTimeFormatter
         {
-            NullFormat = NullFormat.ZeroWithAccuracy,
-            DigitsFormat = DigitsFormat.SingleDigitMinutes,
-            Accuracy = TimeAccuracy.Milliseconds,
-            AutomaticPrecision = true,
+            Accuracy = TimeAccuracy.Milliseconds
         };
-        LocalTimeFormatter = new RegularTimeFormatter();
+        PBTimeFormatter = new RegularTimeFormatter();
         InternalComponent = new InfoTextComponent("World Record", TimeFormatConstants.DASH);
         Settings = new WorldRecordSettings()
         {
@@ -151,7 +148,7 @@ public class WorldRecordComponent : IComponent
         if (WorldRecord != null)
         {
             SpeedrunComSharp.TimingMethod? timingMethodOverride = GetTimingMethodOverride();
-            TimeSpan? time = GetWorldRecordTime(timingMethodOverride);
+            TimeSpan? wrTime = GetWorldRecordTime(timingMethodOverride);
             Model.TimingMethod timingMethod = State.CurrentTimingMethod;
             Game game = State.Run.Metadata.Game;
             if (game != null)
@@ -164,11 +161,26 @@ public class WorldRecordComponent : IComponent
                 {
                     timingMethod = game.Ruleset.DefaultTimingMethod.ToLiveSplitTimingMethod();
                 }
+                
+                var isMillisecondsPrecision = CheckPrecisionMillis(wrTime);
+                if(Settings.WRPrecision == WorldRecordPrecisionType.FromLeaderboard)
+                {
+                    PBTimeFormatter.AutomaticPrecision = true;
+                    WRTimeFormatter.AutomaticPrecision = true;
+                    WRTimeFormatter.Accuracy = TimeAccuracy.Milliseconds;
+                }
+                else
+                {
+                    PBTimeFormatter.AutomaticPrecision = false;
+                    WRTimeFormatter.AutomaticPrecision = false;
+                    WRTimeFormatter.Accuracy = isMillisecondsPrecision ? TimeAccuracy.Milliseconds : TimeAccuracy.Seconds;
+                }
 
-                LocalTimeFormatter.Accuracy = game.Ruleset.ShowMilliseconds ? TimeAccuracy.Milliseconds : TimeAccuracy.Seconds;
+                // Take precision from the fetched WR to align the PB with the precision available on the leaderboards
+                PBTimeFormatter.Accuracy = isMillisecondsPrecision ? TimeAccuracy.Milliseconds : TimeAccuracy.Seconds;
             }
 
-            string formatted = TimeFormatter.Format(time);
+            string formatted = WRTimeFormatter.Format(wrTime);
             bool isLoggedIn = SpeedrunCom.Client.IsAccessTokenValid;
             string userName = string.Empty;
             if (isLoggedIn)
@@ -180,10 +192,10 @@ public class WorldRecordComponent : IComponent
                 isLoggedIn && p.Name == userName ? "me" : p.Name))));
             int tieCount = AllTies.Count;
 
-            TimeSpan? finalTime = GetPBTime(timingMethod);
-            if (IsPBTimeLower(finalTime, time, game != null && game.Ruleset.ShowMilliseconds))
+            TimeSpan? pbTime = GetPBTime(timingMethod);
+            if (IsPBTimeLower(pbTime, wrTime))
             {
-                formatted = LocalTimeFormatter.Format(finalTime);
+                formatted = PBTimeFormatter.Format(pbTime);
                 runners = State.Run.Metadata.Category.Players.Value > 1 ? "us" : "me";
                 tieCount = 1;
             }
@@ -247,19 +259,35 @@ public class WorldRecordComponent : IComponent
         }
     }
 
-    private bool IsPBTimeLower(TimeSpan? pbTime, TimeSpan? recordTime, bool showMillis)
+    private bool CheckPrecisionMillis(TimeSpan? recordTime)
     {
-        if (pbTime == null || recordTime == null)
+        if(Settings.WRPrecision == WorldRecordPrecisionType.FromLeaderboard)
+        {
+            if(!recordTime.HasValue)
+            {
+                // Fallback to Milliseconds
+                return true;
+            }
+
+            return recordTime.Value.Milliseconds != 0;
+        }
+
+        return Settings.WRPrecision == WorldRecordPrecisionType.Milliseconds;
+    }
+
+    private bool IsPBTimeLower(TimeSpan? pbTime, TimeSpan? wrTime)
+    {
+        if (pbTime == null || wrTime == null)
         {
             return false;
         }
 
-        if (showMillis)
+        if (CheckPrecisionMillis(wrTime))
         {
-            return (int)pbTime.Value.TotalMilliseconds <= (int)recordTime.Value.TotalMilliseconds;
+            return (int)pbTime.Value.TotalMilliseconds <= (int)wrTime.Value.TotalMilliseconds;
         }
 
-        return (int)pbTime.Value.TotalSeconds <= (int)recordTime.Value.TotalSeconds;
+        return (int)pbTime.Value.TotalSeconds <= (int)wrTime.Value.TotalSeconds;
     }
 
     private TimeSpan? GetPBTime(Model.TimingMethod method)
@@ -328,6 +356,7 @@ public class WorldRecordComponent : IComponent
         Cache["FilterVariables"] = Settings.FilterVariables;
         Cache["FilterSubcategories"] = Settings.FilterSubcategories;
         Cache["TimingMethod"] = Settings.TimingMethod;
+        Cache["PrecisionType"] = Settings.WRPrecision;
 
         if (Cache.HasChanged)
         {
