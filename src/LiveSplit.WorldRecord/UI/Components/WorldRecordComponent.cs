@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
@@ -121,10 +121,22 @@ public class WorldRecordComponent : IComponent
 
                 SpeedrunComSharp.TimingMethod? timingMethodFilter = GetTimingMethodOverride();
 
-                Leaderboard leaderboard = Client.Leaderboards.GetLeaderboardForFullGameCategory(State.Run.Metadata.Game.ID, State.Run.Metadata.Category.ID,
+                Leaderboard leaderboard;
+
+                if (State.Run.Metadata.Level == null)
+                {
+                    leaderboard = Client.Leaderboards.GetLeaderboardForFullGameCategory(State.Run.Metadata.Game.ID, State.Run.Metadata.Category.ID,
                     top: 1,
                     platformId: platformFilter, regionId: regionFilter,
                     emulatorsFilter: emulatorFilter, variableFilters: variableFilter, orderBy: timingMethodFilter);
+                }
+                else
+                {
+                    leaderboard = Client.Leaderboards.GetLeaderboardForLevel(State.Run.Metadata.Game.ID, State.Run.Metadata.Level.ID, State.Run.Metadata.Category.ID,
+                    top: 1,
+                    platformId: platformFilter, regionId: regionFilter,
+                    emulatorsFilter: emulatorFilter, variableFilters: variableFilter, orderBy: timingMethodFilter);
+                }
 
                 if (leaderboard != null)
                 {
@@ -349,6 +361,7 @@ public class WorldRecordComponent : IComponent
         Cache.Restart();
         Cache["Game"] = state.Run.GameName;
         Cache["Category"] = state.Run.CategoryName;
+        Cache["Level"] = state.Run.LevelName;
         Cache["PlatformID"] = Settings.FilterPlatform ? state.Run.Metadata.PlatformName : null;
         Cache["RegionID"] = Settings.FilterRegion ? state.Run.Metadata.RegionName : null;
         Cache["UsesEmulator"] = Settings.FilterPlatform ? (bool?)state.Run.Metadata.UsesEmulator : null;
